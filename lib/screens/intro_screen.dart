@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -8,7 +9,7 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-  bool isEnglish = false;
+  bool isEnglish = true;
 
   @override
   Widget build(BuildContext context) {
@@ -16,23 +17,27 @@ class _IntroScreenState extends State<IntroScreen> {
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
         children: [
+          SizedBox(height: 30.h),
           SizedBox(
-            height: 300,
+            width: 364.w,
+            height: 400.h,
             child: Image.asset('assets/images/welcome.png'),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           Text(
             'Chose Language',
             style: Theme.of(context).textTheme.labelSmall,
           ),
-          const SizedBox(height: 50),
+          SizedBox(height: 30.h),
           Container(
-            width: 125,
-            height: 50,
+            width: 135.w,
+            height: 55.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                  color: Theme.of(context).colorScheme.primary, width: 3),
+                color: Theme.of(context).colorScheme.primary,
+                width: 3.w,
+              ),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
@@ -45,9 +50,9 @@ class _IntroScreenState extends State<IntroScreen> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10.r),
+                            bottomRight: Radius.circular(10.r),
                           ),
                           color: isEnglish == true
                               ? Theme.of(context).colorScheme.primary

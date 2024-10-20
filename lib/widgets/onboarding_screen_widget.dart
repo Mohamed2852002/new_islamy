@@ -1,36 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingScreenWidget extends StatelessWidget {
-  const OnboardingScreenWidget(
-      {super.key,
-      required this.image,
-      required this.label,
-      required this.info});
+  const OnboardingScreenWidget({
+    super.key,
+    required this.image,
+    required this.label,
+    required this.info,
+    required this.imageWidth,
+  });
   final String image;
   final String label;
   final String info;
+  final double imageWidth;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: EdgeInsets.symmetric(horizontal: 25.h),
       child: Column(
         children: [
+          SizedBox(height: 30.h),
           SizedBox(
-            height: 300,
+            width: imageWidth.w,
+            height: 400.h,
             child: Image.asset(image),
           ),
-          const SizedBox(height: 30),
+          SizedBox(height: 30.h),
           Text(
             label,
             style: Theme.of(context).textTheme.labelSmall,
           ),
-          const SizedBox(height: 25),
+          SizedBox(height: 26.h),
           Text(
             info,
             textAlign: TextAlign.center,
-            style:
-                Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 20),
+            style: Theme.of(context)
+                .textTheme
+                .labelSmall!
+                .copyWith(fontSize: 20.sp),
           ),
         ],
       ),
