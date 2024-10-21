@@ -12,12 +12,14 @@ class HadethContentWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => HadethDetailsScreen(hadethModel: hadethModel),
-            ),);
+          context,
+          MaterialPageRoute(
+            builder: (context) => HadethDetailsScreen(hadethModel: hadethModel),
+          ),
+        );
       },
       child: Container(
+        width: 313.w,
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.primary,
           borderRadius: BorderRadius.circular(20.r),
@@ -38,8 +40,14 @@ class HadethContentWidget extends StatelessWidget {
               child: SizedBox(
                 width: 312.w,
                 height: 81.h,
-                child: Image.asset(
-                  'assets/images/Mosque-02.png',
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(20.r),
+                    bottomRight: Radius.circular(20.r),
+                  ),
+                  child: Image.asset(
+                    'assets/images/Mosque-02.png',
+                  ),
                 ),
               ),
             ),

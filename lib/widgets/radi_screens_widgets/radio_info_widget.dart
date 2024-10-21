@@ -4,18 +4,15 @@ import 'package:new_islamy/models/radio_model.dart';
 import 'package:new_islamy/providers/radio_provider.dart';
 import 'package:provider/provider.dart';
 
-class RadioInfoWidget extends StatefulWidget {
-  const RadioInfoWidget({super.key, required this.radioModel});
+// ignore: must_be_immutable
+class RadioInfoWidget extends StatelessWidget {
+  RadioInfoWidget({super.key, required this.radioModel});
   final RadioModel radioModel;
-  @override
-  State<RadioInfoWidget> createState() => _RadioInfoWidgetState();
-}
-
-class _RadioInfoWidgetState extends State<RadioInfoWidget> {
   bool isPlaying = false;
 
   @override
   Widget build(BuildContext context) {
+    RadioProvider radioProvider = Provider.of<RadioProvider>(context);
     return Container(
       width: 390.w,
       height: 133.h,
@@ -44,7 +41,7 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                widget.radioModel.radioName,
+                radioModel.radioName,
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.labelSmall!.copyWith(
                     fontSize: 20.sp,
@@ -60,23 +57,14 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget> {
                   isPlaying
                       ? IconButton(
                           onPressed: () {
-                            Provider.of<RadioProvider>(context, listen: false)
-                                .audioPlayer
-                                .pause();
+                            radioProvider.pauseAudio();
                             isPlaying = false;
-                            setState(() {});
                           },
                           icon: const Icon(Icons.pause))
                       : IconButton(
                           onPressed: () {
-                            Provider.of<RadioProvider>(context, listen: false)
-                                .audioPlayer
-                                .setUrl(widget.radioModel.radioUrl);
-                            Provider.of<RadioProvider>(context, listen: false)
-                                .audioPlayer
-                                .play();
+                            radioProvider.playAudio(radioModel.radioUrl);
                             isPlaying = true;
-                            setState(() {});
                           },
                           icon: const Icon(Icons.play_arrow_rounded),
                         ),

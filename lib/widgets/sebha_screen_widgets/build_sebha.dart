@@ -8,7 +8,10 @@ class BuildSebha extends StatefulWidget {
   State<BuildSebha> createState() => _BuildSebhaState();
 }
 
-class _BuildSebhaState extends State<BuildSebha> {
+class _BuildSebhaState extends State<BuildSebha>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   final List<String> tasbeh = const [
     'سبحان الله',
     'الحمد لله',
@@ -21,6 +24,7 @@ class _BuildSebhaState extends State<BuildSebha> {
   double angle = 0;
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return SizedBox(
       width: double.infinity,
       child: GestureDetector(

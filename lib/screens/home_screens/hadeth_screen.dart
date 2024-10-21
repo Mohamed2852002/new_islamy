@@ -41,7 +41,8 @@ class _HadethScreenState extends State<HadethScreen> {
               Expanded(
                 child: CarouselSlider.builder(
                   options: CarouselOptions(
-                    height: 529.h,
+                    viewportFraction: 0.73,
+                    height: 565.h,
                     enlargeCenterPage: true,
                   ),
                   itemCount: hadeth.length,
@@ -66,7 +67,10 @@ class _HadethScreenState extends State<HadethScreen> {
       hadethLines.removeAt(0);
       String hadethContent = hadethLines.join(' ');
       hadeth.add(
-        HadethModel(hadethContent: hadethContent, hadethName: hadethName,hadethNumber: i+1),
+        HadethModel(
+            hadethContent: hadethContent,
+            hadethName: hadethName,
+            hadethNumber: i + 1),
       );
     }
     isLoading = false;

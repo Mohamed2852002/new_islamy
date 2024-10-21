@@ -5,11 +5,15 @@ class AppTheme {
   static const primaryColor = Color(0xffE2BE7F);
   static const secondaryColor = Color(0xff202020);
   static const tertiaryColor = Color(0xff707070);
+  static const fourthColor = Color(0xff856B3F);
+  static const fifthColor = Color(0xffB19768);
   static final appStyle = ThemeData(
       colorScheme: const ColorScheme.dark(
         primary: primaryColor,
         secondary: secondaryColor,
         tertiary: tertiaryColor,
+        primaryContainer: fourthColor,
+        secondaryContainer: fifthColor,
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
