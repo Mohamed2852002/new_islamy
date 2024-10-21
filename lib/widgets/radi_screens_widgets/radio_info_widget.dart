@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:new_islamy/models/radio_model.dart';
+import 'package:new_islamy/providers/radio_provider.dart';
+import 'package:provider/provider.dart';
 
 class RadioInfoWidget extends StatefulWidget {
   const RadioInfoWidget({super.key, required this.radioModel});
@@ -12,13 +13,6 @@ class RadioInfoWidget extends StatefulWidget {
 
 class _RadioInfoWidgetState extends State<RadioInfoWidget> {
   bool isPlaying = false;
-  final player = AudioPlayer();
-
-  @override
-  void initState() {
-    super.initState();
-    player.setUrl(widget.radioModel.radioUrl);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,14 +60,21 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget> {
                   isPlaying
                       ? IconButton(
                           onPressed: () {
-                            player.pause();
+                            Provider.of<RadioProvider>(context, listen: false)
+                                .audioPlayer
+                                .pause();
                             isPlaying = false;
                             setState(() {});
                           },
                           icon: const Icon(Icons.pause))
                       : IconButton(
                           onPressed: () {
-                            player.play();
+                            Provider.of<RadioProvider>(context, listen: false)
+                                .audioPlayer
+                                .setUrl(widget.radioModel.radioUrl);
+                            Provider.of<RadioProvider>(context, listen: false)
+                                .audioPlayer
+                                .play();
                             isPlaying = true;
                             setState(() {});
                           },
