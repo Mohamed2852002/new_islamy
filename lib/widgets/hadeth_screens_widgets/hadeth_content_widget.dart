@@ -36,22 +36,6 @@ class HadethContentWidget extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 0,
-              child: SizedBox(
-                width: 312.w,
-                height: 81.h,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20.r),
-                    bottomRight: Radius.circular(20.r),
-                  ),
-                  child: Image.asset(
-                    'assets/images/Mosque-02.png',
-                  ),
-                ),
-              ),
-            ),
-            Positioned(
               top: 10.h,
               left: 10.w,
               child: SizedBox(
@@ -82,19 +66,34 @@ class HadethContentWidget extends StatelessWidget {
             Column(
               children: [
                 SizedBox(height: 103.h),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 22.w),
-                  child: Text(
-                    hadethModel.hadethContent,
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: Colors.black,
-                          fontSize: 16.sp,
-                          height: 2.h,
-                        ),
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                    maxLines: 12,
-                    overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 22.w),
+                    child: Text(
+                      hadethModel.hadethContent,
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                            color: Colors.black,
+                            fontSize: 16.sp,
+                            height: 2.h,
+                          ),
+                      textAlign: TextAlign.center,
+                      textDirection: TextDirection.rtl,
+                      maxLines: 12,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 312.w,
+                  height: 81.h,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20.r),
+                      bottomRight: Radius.circular(20.r),
+                    ),
+                    child: Image.asset(
+                      'assets/images/Mosque-02.png',
+                    ),
                   ),
                 ),
               ],

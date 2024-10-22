@@ -41,7 +41,7 @@ class _HadethScreenState extends State<HadethScreen> {
               Expanded(
                 child: CarouselSlider.builder(
                   options: CarouselOptions(
-                    viewportFraction: 0.73,
+                    viewportFraction: 0.87.w,
                     height: 565.h,
                     enlargeCenterPage: true,
                   ),

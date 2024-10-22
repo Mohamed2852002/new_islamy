@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/radio_model.dart';
 import 'package:new_islamy/providers/radio_provider.dart';
 import 'package:new_islamy/services/radio_service.dart';
-import 'package:new_islamy/widgets/radi_screens_widgets/radio_info_widget.dart';
+import 'package:new_islamy/widgets/radio_screens_widgets/radio_info_widget.dart';
 import 'package:provider/provider.dart';
 
 class RadioScreen extends StatefulWidget {
@@ -15,6 +15,7 @@ class RadioScreen extends StatefulWidget {
 
 class _RadioScreenState extends State<RadioScreen>
     with AutomaticKeepAliveClientMixin {
+      
   bool onRadioScreen = true;
   bool isLoading = true;
   RadioService radioService = RadioService();

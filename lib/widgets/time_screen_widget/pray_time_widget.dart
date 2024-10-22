@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PrayTimeWidget extends StatelessWidget {
-  const PrayTimeWidget({super.key});
-
+  const PrayTimeWidget(
+      {super.key, required this.prayName, required this.prayTime, this.time = 'PM'});
+  final String prayName;
+  final String prayTime;
+  final String time;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,21 +27,21 @@ class PrayTimeWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'asr',
+            prayName,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
                   color: Colors.white,
                   fontSize: 16.sp,
                 ),
           ),
           Text(
-            '4:54',
+            prayTime,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
                   color: Colors.white,
                   fontSize: 32.sp,
                 ),
           ),
           Text(
-            'PM',
+            time,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
                   color: Colors.white,
                   fontSize: 16.sp,
