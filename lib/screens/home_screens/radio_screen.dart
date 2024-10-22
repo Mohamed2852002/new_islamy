@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/radio_model.dart';
 import 'package:new_islamy/providers/radio_provider.dart';
 import 'package:new_islamy/services/radio_service.dart';
-import 'package:new_islamy/widgets/radi_screens_widgets/radio_info_widget.dart';
+import 'package:new_islamy/widgets/radio_screens_widgets/radio_info_widget.dart';
 import 'package:provider/provider.dart';
 
 class RadioScreen extends StatefulWidget {
@@ -13,16 +13,23 @@ class RadioScreen extends StatefulWidget {
   State<RadioScreen> createState() => _RadioScreenState();
 }
 
-class _RadioScreenState extends State<RadioScreen> {
+class _RadioScreenState extends State<RadioScreen>
+    with AutomaticKeepAliveClientMixin {
+      
   bool onRadioScreen = true;
   bool isLoading = true;
   RadioService radioService = RadioService();
-  List<RadioModel> models = [];
+  List<RadioModel> radioModels = [];
+  List<RadioModel> recitersModels = [];
   fetchRadio() async {
-    models = await radioService.getRadio();
+    radioModels = await radioService.getRadio();
+    recitersModels = await radioService.getReciter();
     isLoading = false;
     setState(() {});
   }
+
+  @override
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -32,6 +39,8 @@ class _RadioScreenState extends State<RadioScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return isLoading
         ? const Center(child: CircularProgressIndicator())
         : ChangeNotifierProvider(
@@ -119,16 +128,27 @@ class _RadioScreenState extends State<RadioScreen> {
                     ),
                   ),
                   SizedBox(height: 18.h),
-                  Expanded(
-                    child: ListView.separated(
-                      padding: EdgeInsets.zero,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(height: 16.h),
-                      itemCount: models.length,
-                      itemBuilder: (context, index) =>
-                          RadioInfoWidget(radioModel: models[index]),
-                    ),
-                  ),
+                  onRadioScreen
+                      ? Expanded(
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 16.h),
+                            itemCount: radioModels.length,
+                            itemBuilder: (context, index) =>
+                                RadioInfoWidget(radioModel: radioModels[index]),
+                          ),
+                        )
+                      : Expanded(
+                          child: ListView.separated(
+                            padding: EdgeInsets.zero,
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 16.h),
+                            itemCount: recitersModels.length,
+                            itemBuilder: (context, index) => RadioInfoWidget(
+                                radioModel: recitersModels[index]),
+                          ),
+                        ),
                 ],
               ),
             ),

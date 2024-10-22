@@ -9,7 +9,7 @@ class SebhaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(height: 16.h),
+        SizedBox(height: 18.h),
         Text(
           'سَبِّحِ اسْمَ رَبِّكَ الأعلى',
           style: Theme.of(context).textTheme.labelSmall!.copyWith(
