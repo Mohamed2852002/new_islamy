@@ -141,12 +141,10 @@ class _TimeWidgetState extends State<TimeWidget>
             ),
             isLoading
                 ? Center(
-                    child: Expanded(
-                      child: CircularProgressIndicator(
-                        color: Theme.of(context).colorScheme.primaryContainer,
-                      ),
-                    ),
-                  )
+                  child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                  ),
+                )
                 : Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
