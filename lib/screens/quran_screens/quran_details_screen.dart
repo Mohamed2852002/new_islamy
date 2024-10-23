@@ -76,7 +76,7 @@ class _QuranDetailsScreenState extends State<QuranDetailsScreen> {
   loadSura(int index) async {
     String fileContent =
         await rootBundle.loadString('assets/text_files/$index.txt');
-    suraLines = fileContent.split('\n');
+    suraLines = fileContent.trim().split('\n');
     isLoading = false;
     setState(() {});
   }

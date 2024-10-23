@@ -40,33 +40,42 @@ class TimeScreen extends StatelessWidget {
       create: (context) => TimeProvider(),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16.h),
-            const TimeWidget(),
-            SizedBox(height: 16.h),
-            Text(
-              'Azkar',
-              style: Theme.of(context)
-                  .textTheme
-                  .labelSmall!
-                  .copyWith(fontSize: 16.sp),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: SizedBox(height: 16.h),
             ),
-            SizedBox(height: 16.h),
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20.w,
-                  mainAxisSpacing: 16.w,
-                  mainAxisExtent: 260.h,
-                ),
-                itemCount: models.length,
-                itemBuilder: (context, index) =>
-                    ZekrWidget(azkarModel: models[index]),
+            const SliverToBoxAdapter(
+              child: TimeWidget(),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 16.h),
+            ),
+            SliverToBoxAdapter(
+              child: Text(
+                'Azkar',
+                style: Theme.of(context)
+                    .textTheme
+                    .labelSmall!
+                    .copyWith(fontSize: 16.sp),
               ),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 16.h),
+            ),
+            SliverGrid.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 20.w,
+                mainAxisSpacing: 16.h,
+                mainAxisExtent: 260.h,
+              ),
+              itemCount: models.length,
+              itemBuilder: (context, index) =>
+                  ZekrWidget(azkarModel: models[index]),
+            ),
+            SliverToBoxAdapter(
+              child: SizedBox(height: 16.h),
             ),
           ],
         ),

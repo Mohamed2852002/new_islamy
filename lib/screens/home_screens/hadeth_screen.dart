@@ -13,49 +13,6 @@ class HadethScreen extends StatefulWidget {
 }
 
 class _HadethScreenState extends State<HadethScreen> {
-  bool isLoading = true;
-  @override
-  void initState() {
-    super.initState();
-    loadHadeth();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return isLoading
-        ? const CircularProgressIndicator()
-        : Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: const TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Hadeth Name',
-                    prefixIcon: ImageIcon(
-                      AssetImage('assets/images/hadeth.png'),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
-              Expanded(
-                child: CarouselSlider.builder(
-                  options: CarouselOptions(
-                    viewportFraction: 0.87.w,
-                    height: 565.h,
-                    enlargeCenterPage: true,
-                  ),
-                  itemCount: hadeth.length,
-                  itemBuilder: (context, index, page) => HadethContentWidget(
-                    hadethModel: hadeth[index],
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.h),
-            ],
-          );
-  }
-
   List<HadethModel> hadeth = [];
   loadHadeth() async {
     String fileContent =
@@ -73,7 +30,76 @@ class _HadethScreenState extends State<HadethScreen> {
             hadethNumber: i + 1),
       );
     }
+    foundHadeth = hadeth;
     isLoading = false;
     setState(() {});
+  }
+
+  bool isLoading = true;
+
+  List<HadethModel> foundHadeth = [];
+  filterHadeth(String enteredKeys) {
+    List<HadethModel> reslts = [];
+    if (enteredKeys.isEmpty) {
+      reslts = hadeth;
+    } else {
+      reslts = hadeth
+          .where((hadeth) => hadeth.hadethName.contains(enteredKeys))
+          .toList();
+    }
+    setState(() {
+      foundHadeth = reslts;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadHadeth();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? const CircularProgressIndicator()
+        : Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: TextField(
+                  onChanged: (value) {
+                    filterHadeth(value);
+                  },
+                  decoration: const InputDecoration(
+                    hintText: 'Hadeth Name',
+                    prefixIcon: ImageIcon(
+                      AssetImage('assets/images/hadeth.png'),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20.h),
+              Expanded(
+                child: CarouselSlider.builder(
+                  options: CarouselOptions(
+                    viewportFraction: 0.87.w,
+                    height: 565.h,
+                    enlargeCenterPage: true,
+                  ),
+                  itemCount: foundHadeth.isNotEmpty ? foundHadeth.length : 0,
+                  itemBuilder: (context, index, page) => foundHadeth.isEmpty
+                      ? Center(
+                          child: Text(
+                          'Non Found',
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ))
+                      : HadethContentWidget(
+                          hadethModel: foundHadeth[index],
+                        ),
+                ),
+              ),
+              SizedBox(height: 20.h),
+            ],
+          );
   }
 }
