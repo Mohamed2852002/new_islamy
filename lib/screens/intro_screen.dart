@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:new_islamy/widgets/language_selector_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -9,8 +11,6 @@ class IntroScreen extends StatefulWidget {
 }
 
 class _IntroScreenState extends State<IntroScreen> {
-  bool isEnglish = true;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -25,7 +25,7 @@ class _IntroScreenState extends State<IntroScreen> {
           ),
           SizedBox(height: 30.h),
           Text(
-            'Chose Language',
+            AppLocalizations.of(context)!.language_choice,
             style: Theme.of(context).textTheme.labelSmall,
           ),
           SizedBox(height: 30.h),
@@ -39,49 +39,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 width: 3.w,
               ),
             ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      isEnglish = true;
-                      setState(() {});
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.r),
-                            bottomRight: Radius.circular(10.r),
-                          ),
-                          color: isEnglish == true
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent),
-                      child: Image.asset('assets/images/US.png'),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      isEnglish = false;
-                      setState(() {});
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                          ),
-                          color: isEnglish == false
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent),
-                      child: Image.asset('assets/images/YE.png'),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            child: const LanguageSelectorWidget(),
           )
         ],
       ),

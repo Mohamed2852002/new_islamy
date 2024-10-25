@@ -5,6 +5,7 @@ import 'package:new_islamy/providers/radio_provider.dart';
 import 'package:new_islamy/services/radio_service.dart';
 import 'package:new_islamy/widgets/radio_screens_widgets/radio_info_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RadioScreen extends StatefulWidget {
   const RadioScreen({super.key});
@@ -53,78 +54,82 @@ class _RadioScreenState extends State<RadioScreen>
                 color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(12.r),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        onRadioScreen = true;
-                        setState(() {});
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: onRadioScreen
-                              ? Theme.of(context).colorScheme.primary
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Radio',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .copyWith(
-                                  color: onRadioScreen
-                                      ? Colors.black
-                                      : Colors.white,
-                                  fontSize: 16.sp,
-                                ),
-                            textAlign: TextAlign.center,
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          onRadioScreen = true;
+                          setState(() {});
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: onRadioScreen
+                                ? Theme.of(context).colorScheme.primary
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.radio_tab,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                    color: onRadioScreen
+                                        ? Colors.black
+                                        : Colors.white,
+                                    fontSize: 16.sp,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        onRadioScreen = false;
-                        setState(() {});
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: onRadioScreen
-                              ? Colors.transparent
-                              : Theme.of(context).colorScheme.primary,
-                          borderRadius: BorderRadius.circular(12.r),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Reciters',
-                            style: Theme.of(context)
-                                .textTheme
-                                .labelSmall!
-                                .copyWith(
-                                  color: onRadioScreen
-                                      ? Colors.white
-                                      : Colors.black,
-                                  fontSize: 16.sp,
-                                ),
-                            textAlign: TextAlign.center,
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          onRadioScreen = false;
+                          setState(() {});
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: onRadioScreen
+                                ? Colors.transparent
+                                : Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Center(
+                            child: Text(
+                              AppLocalizations.of(context)!.reciters_tab,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .labelSmall!
+                                  .copyWith(
+                                    color: onRadioScreen
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontSize: 16.sp,
+                                  ),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             SizedBox(height: 18.h),
             onRadioScreen
                 ? isLoading
-                    ? const Expanded(child: Center(child: CircularProgressIndicator()))
+                    ? const Expanded(
+                        child: Center(child: CircularProgressIndicator()))
                     : Expanded(
                         child: ListView.separated(
                           padding: EdgeInsets.zero,
@@ -136,7 +141,8 @@ class _RadioScreenState extends State<RadioScreen>
                         ),
                       )
                 : isLoading
-                    ? const Expanded(child: Center(child: CircularProgressIndicator()))
+                    ? const Expanded(
+                        child: Center(child: CircularProgressIndicator()))
                     : Expanded(
                         child: ListView.separated(
                           padding: EdgeInsets.zero,

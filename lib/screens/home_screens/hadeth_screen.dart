@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/hadeth_model.dart';
 import 'package:new_islamy/widgets/hadeth_screens_widgets/hadeth_content_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HadethScreen extends StatefulWidget {
   const HadethScreen({super.key});
@@ -70,9 +71,10 @@ class _HadethScreenState extends State<HadethScreen> {
                   onChanged: (value) {
                     filterHadeth(value);
                   },
-                  decoration: const InputDecoration(
-                    hintText: 'Hadeth Name',
-                    prefixIcon: ImageIcon(
+                  decoration: InputDecoration(
+                    hintText:
+                        AppLocalizations.of(context)!.hadeth_name_text_field,
+                    prefixIcon: const ImageIcon(
                       AssetImage('assets/images/hadeth.png'),
                     ),
                   ),
@@ -90,9 +92,10 @@ class _HadethScreenState extends State<HadethScreen> {
                   itemBuilder: (context, index, page) => foundHadeth.isEmpty
                       ? Center(
                           child: Text(
-                          'Non Found',
-                          style: Theme.of(context).textTheme.labelSmall,
-                        ))
+                            'Non Found',
+                            style: Theme.of(context).textTheme.labelSmall,
+                          ),
+                        )
                       : HadethContentWidget(
                           hadethModel: foundHadeth[index],
                         ),

@@ -5,6 +5,7 @@ import 'package:new_islamy/providers/time_provider.dart';
 import 'package:new_islamy/widgets/time_screen_widget/time_widget.dart';
 import 'package:new_islamy/widgets/time_screen_widget/zekr_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeScreen extends StatelessWidget {
   const TimeScreen({super.key});
@@ -20,7 +21,7 @@ class TimeScreen extends StatelessWidget {
     AzkarModel(
         zekrImage: 'assets/images/salah.png',
         zekrName: 'Pray Azkar',
-        zekrArabicName: 'أذكار بعد السلام من الصلاة المفروضة'),
+        zekrArabicName: 'أذكار بعد الصلاة'),
     AzkarModel(
         zekrImage: 'assets/images/prophets.png',
         zekrName: 'Prohpets Azkar',
@@ -53,7 +54,7 @@ class TimeScreen extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: Text(
-                'Azkar',
+                AppLocalizations.of(context)!.azkar_list,
                 style: Theme.of(context)
                     .textTheme
                     .labelSmall!

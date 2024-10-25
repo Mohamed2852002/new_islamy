@@ -30,7 +30,7 @@ class _BuildSebhaState extends State<BuildSebha>
       child: GestureDetector(
         onTap: () {
           counter++;
-          if (counter > 30) {
+          if (counter > 33) {
             cuurentIndex++;
             counter = 0;
           }

@@ -38,7 +38,7 @@ class QuranListWidget extends StatelessWidget {
               Text(
                 '${suraModel.surahNumber}',
                 style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                      fontSize: 20.sp,
+                      fontSize: 15.sp,
                       color: Colors.white,
                     ),
               ),

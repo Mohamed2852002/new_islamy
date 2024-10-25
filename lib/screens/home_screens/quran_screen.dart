@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/sura_model.dart';
-import 'package:new_islamy/providers/quran_provider.dart';
 import 'package:new_islamy/widgets/quran_screens_widgets/most_recently_widget.dart';
 import 'package:new_islamy/widgets/quran_screens_widgets/quran_list_widget.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
@@ -590,14 +589,19 @@ class _QuranScreenState extends State<QuranScreen> {
 
   filterSura(String enteredKeys) {
     List<SuraModel> reslts = [];
+    final RegExp arabicRegex = RegExp(r'[\u0600-\u06FF]');
+
     if (enteredKeys.isEmpty) {
       reslts = suras;
-    } else {
+    } else if (arabicRegex.hasMatch(enteredKeys)) {
       reslts = suras
           .where((sura) => sura.arabSuraName.contains(enteredKeys))
           .toList();
+    } else {
       reslts = suras
-          .where((sura) => sura.englishSuraName.contains(enteredKeys))
+          .where((sura) => sura.englishSuraName
+              .toLowerCase()
+              .contains(enteredKeys.toLowerCase()))
           .toList();
     }
     setState(() {
@@ -621,9 +625,9 @@ class _QuranScreenState extends State<QuranScreen> {
             onChanged: (value) {
               filterSura(value);
             },
-            decoration: const InputDecoration(
-              hintText: 'Sura Name',
-              prefixIcon: ImageIcon(
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.sura_name_text_field,
+              prefixIcon: const ImageIcon(
                 AssetImage('assets/images/quran_tab.png'),
               ),
             ),
@@ -636,10 +640,10 @@ class _QuranScreenState extends State<QuranScreen> {
                 child: SizedBox(height: 20.h),
               ),
               SliverPadding(
-                padding: EdgeInsets.only(left: 20.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.h),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    'Most Recently',
+                    AppLocalizations.of(context)!.most_recent_sura,
                     style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           color: Colors.white,
                           fontSize: 16.sp,
@@ -651,7 +655,7 @@ class _QuranScreenState extends State<QuranScreen> {
                 child: SizedBox(height: 10.h),
               ),
               SliverPadding(
-                padding: EdgeInsets.only(left: 20.w),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 sliver: SliverToBoxAdapter(
                   child: SizedBox(
                     height: 150.h,
@@ -670,10 +674,10 @@ class _QuranScreenState extends State<QuranScreen> {
                 child: SizedBox(height: 10.h),
               ),
               SliverPadding(
-                padding: EdgeInsets.only(left: 20.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.h),
                 sliver: SliverToBoxAdapter(
                   child: Text(
-                    'Sura List',
+                    AppLocalizations.of(context)!.sura_list,
                     style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           color: Colors.white,
                           fontSize: 16.sp,

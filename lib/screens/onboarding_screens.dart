@@ -5,6 +5,7 @@ import 'package:new_islamy/screens/intro_screen.dart';
 import 'package:new_islamy/widgets/head_logo_widget.dart';
 import 'package:new_islamy/widgets/onboarding_screen_widget.dart';
 import 'package:new_islamy/widgets/progress_dots.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingScreens extends StatefulWidget {
   const OnboardingScreens({super.key});
@@ -31,31 +32,30 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                   currentIndex = value;
                 });
               },
-              children: const [
-                IntroScreen(),
+              children: [
+                const IntroScreen(),
                 OnboardingScreenWidget(
                   image: 'assets/images/kabba.png',
-                  label: 'Welcome To Islami',
-                  info: 'We Are Very Excited To Have You In Our Community',
+                  label: AppLocalizations.of(context)!.welcome_islami,
+                  info: AppLocalizations.of(context)!.welcome_islami_info,
                   imageWidth: 371,
                 ),
                 OnboardingScreenWidget(
                   image: 'assets/images/quran.png',
-                  label: 'Reading the Quran',
-                  info: 'Read, and your Lord is the Most Generous',
+                  label: AppLocalizations.of(context)!.read_quran,
+                  info: AppLocalizations.of(context)!.read_quran_info,
                   imageWidth: 287,
                 ),
                 OnboardingScreenWidget(
                   image: 'assets/images/bearish.png',
-                  label: 'Bearish',
-                  info: 'Praise the name of your Lord, the Most High',
+                  label: AppLocalizations.of(context)!.bearish,
+                  info: AppLocalizations.of(context)!.bearish_info,
                   imageWidth: 305,
                 ),
                 OnboardingScreenWidget(
                   image: 'assets/images/radio.png',
-                  label: 'Holy Quran Radio',
-                  info:
-                      'You can listen to the Holy Quran Radio through the application for free and easily',
+                  label: AppLocalizations.of(context)!.holy_quran_radio,
+                  info: AppLocalizations.of(context)!.holy_quran_radio_info,
                   imageWidth: 215,
                 ),
               ],
@@ -76,7 +76,9 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                   },
                   child: Text(
                     textAlign: TextAlign.center,
-                    currentIndex != 0 ? 'Back' : '',
+                    currentIndex != 0
+                        ? AppLocalizations.of(context)!.back_button_boarding
+                        : '',
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall!
@@ -105,7 +107,9 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                   },
                   child: Text(
                     textAlign: TextAlign.center,
-                    currentIndex != 4 ? 'Next' : 'Finish',
+                    currentIndex != 4
+                        ? AppLocalizations.of(context)!.next_button_boarding
+                        : AppLocalizations.of(context)!.finish_button_boarding,
                     style: Theme.of(context)
                         .textTheme
                         .labelSmall!
