@@ -11,7 +11,8 @@ class QuranScreen extends StatefulWidget {
   State<QuranScreen> createState() => _QuranScreenState();
 }
 
-class _QuranScreenState extends State<QuranScreen> {
+class _QuranScreenState extends State<QuranScreen>
+    with AutomaticKeepAliveClientMixin {
   final List<SuraModel> suras = [
     SuraModel(
         arabSuraName: "الفاتحة",
@@ -610,13 +611,36 @@ class _QuranScreenState extends State<QuranScreen> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   void initState() {
     super.initState();
     foundSura = suras;
   }
 
+  bool isVisible = false;
+  List<MostRecentlyWidget> mostRecentSuras = [];
+  List<int> surasIndex = [];
+  void addMostRecentSura(SuraModel suraModel, int index) {
+    if (surasIndex.contains(index)) {
+      return;
+    }
+    if (mostRecentSuras.length == 3) {
+      mostRecentSuras.removeAt(0);
+    }
+    if (surasIndex.length == 3) {
+      surasIndex.removeAt(0);
+    }
+    mostRecentSuras.add(
+      MostRecentlyWidget(suraModel: suraModel),
+    );
+    surasIndex.add(index);
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Column(
       children: [
         Padding(
@@ -642,12 +666,39 @@ class _QuranScreenState extends State<QuranScreen> {
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 20.h),
                 sliver: SliverToBoxAdapter(
-                  child: Text(
-                    AppLocalizations.of(context)!.most_recent_sura,
-                    style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          color: Colors.white,
-                          fontSize: 16.sp,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!.most_recent_sura,
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                            ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            isVisible = false;
+                            mostRecentSuras.clear();
+                            surasIndex.clear();
+                          });
+                        },
+                        child: Visibility(
+                          visible: isVisible,
+                          child: Text(
+                            AppLocalizations.of(context)!.clear_recent_sura,
+                            style: Theme.of(context)
+                                .textTheme
+                                .labelSmall!
+                                .copyWith(
+                                  color: Colors.white,
+                                  fontSize: 16.sp,
+                                ),
+                          ),
                         ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -657,15 +708,17 @@ class _QuranScreenState extends State<QuranScreen> {
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 sliver: SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 150.h,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 5,
-                      separatorBuilder: (context, index) =>
-                          SizedBox(width: 10.w),
-                      itemBuilder: (context, index) =>
-                          const MostRecentlyWidget(),
+                  child: Visibility(
+                    visible: isVisible,
+                    child: SizedBox(
+                      height: 150.h,
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) =>
+                            SizedBox(width: 10.w),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: mostRecentSuras.length,
+                        itemBuilder: (context, index) => mostRecentSuras[index],
+                      ),
                     ),
                   ),
                 ),
@@ -691,11 +744,27 @@ class _QuranScreenState extends State<QuranScreen> {
                 sliver: SliverList.separated(
                   separatorBuilder: (context, index) => const Divider(),
                   itemCount: foundSura.length,
-                  itemBuilder: (context, index) => QuranListWidget(
-                    suraModel: foundSura[index],
+                  itemBuilder: (context, index) => InkWell(
+                    onTap: () {
+                      setState(() {
+                        addMostRecentSura(foundSura[index], index);
+                        isVisible = true;
+                      });
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => QuranDetailsScreen(
+                      //       suraModel: foundSura[index],
+                      //     ),
+                      //   ),
+                      // );
+                    },
+                    child: QuranListWidget(
+                      suraModel: foundSura[index],
+                    ),
                   ),
                 ),
-              ),
+              )
             ],
           ),
         ),

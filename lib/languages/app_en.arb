@@ -13,6 +13,7 @@
     "finish_button_boarding" : "Finish",
     "sura_name_text_field" : "Sura Name",
     "most_recent_sura" : "Most Recently",
+    "clear_recent_sura" : "Clear",
     "sura_list" : "Sura List",
     "hadeth_name_text_field" : "Hadeth Name",
     "radio_tab" : "Radio",

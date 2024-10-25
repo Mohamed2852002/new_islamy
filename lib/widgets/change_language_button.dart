@@ -17,7 +17,7 @@ class ChangeLanguageButton extends StatelessWidget {
       },
       child: Text(
         textAlign: TextAlign.center,
-        languageProvider.selectedLanguage == 'en' ? 'en' : 'ar',
+        languageProvider.selectedLanguage == 'en' ? 'En' : 'Ar',
         style: TextStyle(
           color: Theme.of(context).colorScheme.secondary,
         ),

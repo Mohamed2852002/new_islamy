@@ -13,6 +13,7 @@
     "finish_button_boarding" : "إنهاء",
     "sura_name_text_field" : "اسم السورة",
     "most_recent_sura" : "اخر ما تم فتحه",
+    "clear_recent_sura" : "مسح",
     "sura_list" : "السور",
     "hadeth_name_text_field" : "اسم الحديث",
     "radio_tab" : "الإذاعة",
