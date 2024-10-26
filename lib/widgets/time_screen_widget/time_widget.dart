@@ -4,11 +4,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/pray_time_model.dart';
 import 'package:new_islamy/painters/left_painter.dart';
 import 'package:new_islamy/painters/right_painter.dart';
+import 'package:new_islamy/providers/time_provider.dart';
 import 'package:new_islamy/services/pray_time_service.dart';
 import 'package:new_islamy/widgets/time_screen_widget/pray_time_widget.dart';
 
 class TimeWidget extends StatefulWidget {
-  const TimeWidget({super.key});
+  const TimeWidget({super.key, required this.timeProvider});
+  final TimeProvider timeProvider;
 
   @override
   State<TimeWidget> createState() => _TimeWidgetState();
@@ -29,10 +31,16 @@ class _TimeWidgetState extends State<TimeWidget>
     });
   }
 
+  prayTimeCounter() async {
+    await widget.timeProvider.initPrayTime();
+    widget.timeProvider.startCountdown();
+  }
+
   @override
   void initState() {
     super.initState();
     fetchPrayTime();
+    prayTimeCounter();
   }
 
   @override
@@ -128,7 +136,7 @@ class _TimeWidgetState extends State<TimeWidget>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Next Pray - 2038',
+                      'Next Pray - ${widget.timeProvider.formatDuration(widget.timeProvider.duration)}',
                       style: Theme.of(context).textTheme.labelSmall!.copyWith(
                           fontSize: 16.sp,
                           color: Theme.of(context).colorScheme.secondary),
@@ -198,16 +206,20 @@ class _TimeWidgetState extends State<TimeWidget>
                               ),
                               PrayTimeWidget(
                                   prayName: 'Dhuhr',
-                                  prayTime: prayTimeModel.dhuhrTime),
+                                  prayTime: widget.timeProvider
+                                      .setPrayerTime(prayTimeModel.dhuhrTime)),
                               PrayTimeWidget(
                                   prayName: 'Asr',
-                                  prayTime: prayTimeModel.asrTime),
+                                  prayTime: widget.timeProvider
+                                      .setPrayerTime(prayTimeModel.asrTime)),
                               PrayTimeWidget(
                                   prayName: 'Maghrib',
-                                  prayTime: prayTimeModel.maghribTime),
+                                  prayTime: widget.timeProvider.setPrayerTime(
+                                      prayTimeModel.maghribTime)),
                               PrayTimeWidget(
                                   prayName: 'Isha',
-                                  prayTime: prayTimeModel.ishaTime),
+                                  prayTime: widget.timeProvider
+                                      .setPrayerTime(prayTimeModel.ishaTime)),
                             ],
                             options: CarouselOptions(
                               enlargeFactor: 0.2.h,
