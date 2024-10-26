@@ -5,6 +5,7 @@ import 'package:new_islamy/providers/time_provider.dart';
 import 'package:new_islamy/widgets/time_screen_widget/time_widget.dart';
 import 'package:new_islamy/widgets/time_screen_widget/zekr_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeScreen extends StatelessWidget {
   const TimeScreen({super.key});
@@ -20,7 +21,7 @@ class TimeScreen extends StatelessWidget {
     AzkarModel(
         zekrImage: 'assets/images/salah.png',
         zekrName: 'Pray Azkar',
-        zekrArabicName: 'أذكار بعد السلام من الصلاة المفروضة'),
+        zekrArabicName: 'أذكار بعد الصلاة'),
     AzkarModel(
         zekrImage: 'assets/images/prophets.png',
         zekrName: 'Prohpets Azkar',
@@ -36,40 +37,47 @@ class TimeScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TimeProvider(),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16.h),
-            const TimeWidget(),
-            SizedBox(height: 16.h),
-            Text(
-              'Azkar',
+    TimeProvider timeProvider = Provider.of<TimeProvider>(context);
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+          SliverToBoxAdapter(
+            child: TimeWidget(timeProvider: timeProvider),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+          SliverToBoxAdapter(
+            child: Text(
+              AppLocalizations.of(context)!.azkar_list,
               style: Theme.of(context)
                   .textTheme
                   .labelSmall!
                   .copyWith(fontSize: 16.sp),
             ),
-            SizedBox(height: 16.h),
-            Expanded(
-              child: GridView.builder(
-                padding: EdgeInsets.zero,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 20.w,
-                  mainAxisSpacing: 16.w,
-                  mainAxisExtent: 260.h,
-                ),
-                itemCount: models.length,
-                itemBuilder: (context, index) =>
-                    ZekrWidget(azkarModel: models[index]),
-              ),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+          SliverGrid.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 20.w,
+              mainAxisSpacing: 16.h,
+              mainAxisExtent: 260.h,
             ),
-          ],
-        ),
+            itemCount: models.length,
+            itemBuilder: (context, index) =>
+                ZekrWidget(azkarModel: models[index]),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+        ],
       ),
     );
   }

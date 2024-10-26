@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:new_islamy/providers/time_provider.dart';
 import 'package:new_islamy/screens/home_screens/hadeth_screen.dart';
 import 'package:new_islamy/screens/home_screens/quran_screen.dart';
 import 'package:new_islamy/screens/home_screens/radio_screen.dart';
 import 'package:new_islamy/screens/home_screens/sebha_screen.dart';
 import 'package:new_islamy/screens/home_screens/time_screen.dart';
+import 'package:new_islamy/widgets/change_language_button.dart';
 import 'package:new_islamy/widgets/head_logo_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppHomeNavigation extends StatefulWidget {
   const AppHomeNavigation({super.key});
@@ -26,76 +31,92 @@ class _AppHomeNavigationState extends State<AppHomeNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(0.4), // Adjust the opacity
-            BlendMode.dstATop, // Blend mode to apply the color filter
+    return ChangeNotifierProvider(
+      create: (context) => TimeProvider(),
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.4), // Adjust the opacity
+              BlendMode.dstATop, // Blend mode to apply the color filter
+            ),
+            fit: BoxFit.cover,
+            image: AssetImage(images[currentIndex]),
           ),
-          fit: BoxFit.cover,
-          image: AssetImage(images[currentIndex]),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        bottomNavigationBar: NavigationBar(
-          selectedIndex: currentIndex,
-          onDestinationSelected: (value) {
-            currentIndex = value;
-            pageController.animateToPage(value,
-                duration: const Duration(microseconds: 100),
-                curve: Curves.linear);
-            setState(() {});
-          },
-          destinations: const [
-            NavigationDestination(
-                icon: ImageIcon(
-                  AssetImage('assets/images/quran_tab.png'),
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.transparent,
+          bottomNavigationBar: NavigationBar(
+            selectedIndex: currentIndex,
+            onDestinationSelected: (value) {
+              currentIndex = value;
+              pageController.animateToPage(value,
+                  duration: const Duration(microseconds: 100),
+                  curve: Curves.linear);
+              setState(() {});
+            },
+            destinations: [
+              NavigationDestination(
+                  icon: const ImageIcon(
+                    AssetImage('assets/images/quran_tab.png'),
+                  ),
+                  label: AppLocalizations.of(context)!.quran_tab_page),
+              NavigationDestination(
+                  icon: const ImageIcon(
+                    AssetImage('assets/images/hadeth.png'),
+                  ),
+                  label: AppLocalizations.of(context)!.hadeth_tab_page),
+              NavigationDestination(
+                  icon: const ImageIcon(
+                    AssetImage('assets/images/sebha.png'),
+                  ),
+                  label: AppLocalizations.of(context)!.sebha_tab_page),
+              NavigationDestination(
+                  icon: const ImageIcon(
+                    AssetImage('assets/images/radio_tab.png'),
+                  ),
+                  label: AppLocalizations.of(context)!.radio_tab_page),
+              NavigationDestination(
+                  icon: const ImageIcon(
+                    AssetImage('assets/images/time.png'),
+                  ),
+                  label: AppLocalizations.of(context)!.time_tab_page),
+            ],
+          ),
+          body: Column(
+            children: [
+              SizedBox(
+                width: double.infinity,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const HeadLogoWidget(),
+                    Positioned(
+                        right: 25.w,
+                        top: 60.h,
+                        child: const ChangeLanguageButton()),
+                  ],
                 ),
-                label: 'Quran'),
-            NavigationDestination(
-                icon: ImageIcon(
-                  AssetImage('assets/images/hadeth.png'),
-                ),
-                label: 'Hadeth'),
-            NavigationDestination(
-                icon: ImageIcon(
-                  AssetImage('assets/images/sebha.png'),
-                ),
-                label: 'Sebha'),
-            NavigationDestination(
-                icon: ImageIcon(
-                  AssetImage('assets/images/radio_tab.png'),
-                ),
-                label: 'Radio'),
-            NavigationDestination(
-                icon: ImageIcon(
-                  AssetImage('assets/images/time.png'),
-                ),
-                label: 'Time'),
-          ],
-        ),
-        body: Column(
-          children: [
-            const HeadLogoWidget(),
-            Expanded(
-              child: PageView(
-                controller: pageController,
-                onPageChanged: (value) {
-                  currentIndex = value;
-                  setState(() {});
-                },
-                children: const [
-                  QuranScreen(),
-                  HadethScreen(),
-                  SebhaScreen(),
-                  RadioScreen(),
-                  TimeScreen(),
-                ],
               ),
-            )
-          ],
+              Expanded(
+                child: PageView(
+                  controller: pageController,
+                  onPageChanged: (value) {
+                    currentIndex = value;
+                    setState(() {});
+                  },
+                  children: const [
+                    QuranScreen(),
+                    HadethScreen(),
+                    SebhaScreen(),
+                    RadioScreen(),
+                    TimeScreen(),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

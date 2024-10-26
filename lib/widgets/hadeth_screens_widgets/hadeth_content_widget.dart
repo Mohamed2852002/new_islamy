@@ -45,6 +45,15 @@ class HadethContentWidget extends StatelessWidget {
               ),
             ),
             Positioned(
+              top: 10.h,
+              right: 10.w,
+              child: SizedBox(
+                width: 93.w,
+                height: 92.h,
+                child: Image.asset('assets/images/hadeth Cornerr r.png'),
+              ),
+            ),
+            Positioned(
               top: 50.h,
               child: Text(
                 hadethModel.hadethName,
@@ -52,15 +61,6 @@ class HadethContentWidget extends StatelessWidget {
                     .textTheme
                     .labelSmall!
                     .copyWith(color: Colors.black),
-              ),
-            ),
-            Positioned(
-              top: 10.h,
-              right: 10.w,
-              child: SizedBox(
-                width: 93.w,
-                height: 92.h,
-                child: Image.asset('assets/images/hadeth Cornerr r.png'),
               ),
             ),
             Column(
@@ -78,8 +78,8 @@ class HadethContentWidget extends StatelessWidget {
                           ),
                       textAlign: TextAlign.center,
                       textDirection: TextDirection.rtl,
-                      maxLines: 12,
                       overflow: TextOverflow.ellipsis,
+                      maxLines: 12,
                     ),
                   ),
                 ),

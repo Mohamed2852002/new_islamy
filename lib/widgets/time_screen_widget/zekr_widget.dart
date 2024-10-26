@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/azkar_model.dart';
+import 'package:new_islamy/providers/language_provider.dart';
 import 'package:new_islamy/providers/time_provider.dart';
 import 'package:new_islamy/screens/azkar_screens/azkar_details_screen.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,7 @@ class ZekrWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TimeProvider timeProvider = Provider.of<TimeProvider>(context);
+    LanguageProvider languageProvider = Provider.of<LanguageProvider>(context);
     return GestureDetector(
       onTap: () async {
         List<String> azkar =
@@ -39,7 +41,10 @@ class ZekrWidget extends StatelessWidget {
             Image.asset(azkarModel.zekrImage),
             const Spacer(),
             Text(
-              azkarModel.zekrName,
+              languageProvider.selectedLanguage == 'en'
+                  ? azkarModel.zekrName
+                  : azkarModel.zekrArabicName,
+              textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.labelSmall!.copyWith(
                     color: Colors.white,
                     fontSize: 20.sp,
