@@ -7,6 +7,7 @@ import 'package:new_islamy/screens/home_screens/sebha_screen.dart';
 import 'package:new_islamy/screens/home_screens/time_screen.dart';
 import 'package:new_islamy/widgets/change_language_button.dart';
 import 'package:new_islamy/widgets/head_logo_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppHomeNavigation extends StatefulWidget {
   const AppHomeNavigation({super.key});
@@ -51,32 +52,32 @@ class _AppHomeNavigationState extends State<AppHomeNavigation> {
                 curve: Curves.linear);
             setState(() {});
           },
-          destinations: const [
+          destinations: [
             NavigationDestination(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/images/quran_tab.png'),
                 ),
-                label: 'Quran'),
+                label: AppLocalizations.of(context)!.quran_tab_page),
             NavigationDestination(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/images/hadeth.png'),
                 ),
-                label: 'Hadeth'),
+                label: AppLocalizations.of(context)!.hadeth_tab_page),
             NavigationDestination(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/images/sebha.png'),
                 ),
-                label: 'Sebha'),
+                label: AppLocalizations.of(context)!.sebha_tab_page),
             NavigationDestination(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/images/radio_tab.png'),
                 ),
-                label: 'Radio'),
+                label: AppLocalizations.of(context)!.radio_tab_page),
             NavigationDestination(
-                icon: ImageIcon(
+                icon: const ImageIcon(
                   AssetImage('assets/images/time.png'),
                 ),
-                label: 'Time'),
+                label: AppLocalizations.of(context)!.time_tab_page),
           ],
         ),
         body: Column(

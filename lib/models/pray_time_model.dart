@@ -8,6 +8,8 @@ class PrayTimeModel {
   final String hijriDateMonth;
   final String hijriDateYear;
   final String gregorianDate;
+  final String englishWeekDay;
+  final String arabicWeekDay;
   PrayTimeModel({
     required this.fajrTime,
     required this.dhuhrTime,
@@ -18,6 +20,8 @@ class PrayTimeModel {
     required this.hijriDateMonth,
     required this.hijriDateYear,
     required this.gregorianDate,
+    required this.englishWeekDay,
+    required this.arabicWeekDay,
   });
 
   factory PrayTimeModel.fromJson(json) {
@@ -31,6 +35,8 @@ class PrayTimeModel {
       hijriDateMonth: json["data"]["date"]["hijri"]["month"]["en"],
       hijriDateYear: json["data"]["date"]["hijri"]["year"],
       gregorianDate: json["data"]["date"]["readable"],
+      englishWeekDay: json["data"]["date"]["gregorian"]["weekday"]["en"],
+      arabicWeekDay: json["data"]["date"]["hijri"]["weekday"]["ar"],
     );
   }
 }

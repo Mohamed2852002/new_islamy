@@ -4,8 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/pray_time_model.dart';
 import 'package:new_islamy/painters/left_painter.dart';
 import 'package:new_islamy/painters/right_painter.dart';
+import 'package:new_islamy/providers/language_provider.dart';
 import 'package:new_islamy/services/pray_time_service.dart';
 import 'package:new_islamy/widgets/time_screen_widget/pray_time_widget.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeWidget extends StatefulWidget {
   const TimeWidget({super.key});
@@ -37,6 +40,7 @@ class _TimeWidgetState extends State<TimeWidget>
 
   @override
   Widget build(BuildContext context) {
+    LanguageProvider languageProvider = Provider.of<LanguageProvider>(context);
     super.build(context);
     return Directionality(
       textDirection: TextDirection.ltr,
@@ -61,31 +65,6 @@ class _TimeWidgetState extends State<TimeWidget>
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(40.r),
                         topRight: Radius.circular(40.r)),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Pray Time',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                              fontSize: 20.sp,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.71),
-                            ),
-                      ),
-                      Text(
-                        'Wednesday',
-                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                              fontSize: 20.sp,
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .secondary
-                                  .withOpacity(0.90),
-                            ),
-                      ),
-                    ],
                   ),
                 ),
               ),
@@ -122,25 +101,6 @@ class _TimeWidgetState extends State<TimeWidget>
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 16.h,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Next Pray - 2038',
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          fontSize: 16.sp,
-                          color: Theme.of(context).colorScheme.secondary),
-                    ),
-                    // SizedBox(width: 200.w),
-                    Icon(
-                      Icons.volume_down_rounded,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ],
-                ),
-              ),
               isLoading
                   ? Center(
                       child: CircularProgressIndicator(
@@ -150,9 +110,9 @@ class _TimeWidgetState extends State<TimeWidget>
                   : Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 16.h),
+                        SizedBox(height: 15.h),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(width: 30.w),
                             SizedBox(
@@ -170,6 +130,40 @@ class _TimeWidgetState extends State<TimeWidget>
                               ),
                             ),
                             const Spacer(),
+                            SizedBox(width: 15.w),
+                            Column(
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)!.pray_time,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .copyWith(
+                                        fontSize: 20.sp,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .withOpacity(0.71),
+                                      ),
+                                ),
+                                Text(
+                                  languageProvider.selectedLanguage == 'ar'
+                                      ? prayTimeModel.arabicWeekDay
+                                      : prayTimeModel.englishWeekDay,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall!
+                                      .copyWith(
+                                        fontSize: 20.sp,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                            .withOpacity(0.90),
+                                      ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
                             SizedBox(
                               width: 120.w,
                               height: 50.h,
@@ -185,28 +179,30 @@ class _TimeWidgetState extends State<TimeWidget>
                                     ),
                               ),
                             ),
-                            SizedBox(width: 10.w),
+                            SizedBox(width: 8.w),
                           ],
                         ),
+                        SizedBox(height: 10.h),
                         Expanded(
                           child: CarouselSlider(
                             items: [
                               PrayTimeWidget(
-                                prayName: "Fajr",
+                                prayName: AppLocalizations.of(context)!.fajr,
                                 prayTime: prayTimeModel.fajrTime,
                                 time: 'AM',
                               ),
                               PrayTimeWidget(
-                                  prayName: 'Dhuhr',
+                                  prayName: AppLocalizations.of(context)!.dhuhr,
                                   prayTime: prayTimeModel.dhuhrTime),
                               PrayTimeWidget(
-                                  prayName: 'Asr',
+                                  prayName: AppLocalizations.of(context)!.asr,
                                   prayTime: prayTimeModel.asrTime),
                               PrayTimeWidget(
-                                  prayName: 'Maghrib',
+                                  prayName:
+                                      AppLocalizations.of(context)!.maghrib,
                                   prayTime: prayTimeModel.maghribTime),
                               PrayTimeWidget(
-                                  prayName: 'Isha',
+                                  prayName: AppLocalizations.of(context)!.isha,
                                   prayTime: prayTimeModel.ishaTime),
                             ],
                             options: CarouselOptions(
@@ -217,7 +213,49 @@ class _TimeWidgetState extends State<TimeWidget>
                             ),
                           ),
                         ),
-                        SizedBox(height: 30.h),
+                        Row(
+                          children: [
+                            SizedBox(width: 140.w),
+                            Text.rich(
+                              TextSpan(
+                                children: [
+                                  TextSpan(
+                                    text: 'Next Pray',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .copyWith(
+                                          fontSize: 16.sp,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                              .withOpacity(0.75),
+                                        ),
+                                  ),
+                                  TextSpan(
+                                    text: '- 4:38',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .copyWith(
+                                            fontSize: 16.sp,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .secondary),
+                                  )
+                                ],
+                              ),
+                            ),
+                            SizedBox(width: 50.w),
+                            IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.volume_off_rounded,
+                              ),
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
             ],
