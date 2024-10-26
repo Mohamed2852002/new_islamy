@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/sura_model.dart';
+import 'package:new_islamy/screens/quran_screens/quran_details_screen.dart';
 import 'package:new_islamy/widgets/quran_screens_widgets/most_recently_widget.dart';
 import 'package:new_islamy/widgets/quran_screens_widgets/quran_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -750,14 +751,14 @@ class _QuranScreenState extends State<QuranScreen>
                         addMostRecentSura(foundSura[index], index);
                         isVisible = true;
                       });
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => QuranDetailsScreen(
-                      //       suraModel: foundSura[index],
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => QuranDetailsScreen(
+                            suraModel: foundSura[index],
+                          ),
+                        ),
+                      );
                     },
                     child: QuranListWidget(
                       suraModel: foundSura[index],

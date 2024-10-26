@@ -109,25 +109,6 @@ class _TimeWidgetState extends State<TimeWidget>
                   ),
                 ),
               ),
-              Positioned(
-                bottom: 16.h,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Next Pray - ${widget.timeProvider.formatDuration(widget.timeProvider.duration)}',
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                          fontSize: 16.sp,
-                          color: Theme.of(context).colorScheme.secondary),
-                    ),
-                    // SizedBox(width: 200.w),
-                    Icon(
-                      Icons.volume_down_rounded,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                  ],
-                ),
-              ),
               isLoading
                   ? Center(
                       child: CircularProgressIndicator(
@@ -246,7 +227,7 @@ class _TimeWidgetState extends State<TimeWidget>
                         ),
                         Row(
                           children: [
-                            SizedBox(width: 140.w),
+                            SizedBox(width: 110.w),
                             Text.rich(
                               TextSpan(
                                 children: [
@@ -264,7 +245,8 @@ class _TimeWidgetState extends State<TimeWidget>
                                         ),
                                   ),
                                   TextSpan(
-                                    text: '- 4:38',
+                                    text:
+                                        ' - ${widget.timeProvider.formatDuration(widget.timeProvider.duration)}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall!
@@ -277,7 +259,7 @@ class _TimeWidgetState extends State<TimeWidget>
                                 ],
                               ),
                             ),
-                            SizedBox(width: 50.w),
+                            SizedBox(width: 30.w),
                             IconButton(
                               onPressed: () {},
                               icon: const Icon(

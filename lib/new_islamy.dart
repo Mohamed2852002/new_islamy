@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/providers/language_provider.dart';
 import 'package:new_islamy/screens/after_splash_screen.dart';
-import 'package:new_islamy/test.dart';
 import 'package:new_islamy/themes/app_theme.dart';
 // ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -33,7 +32,7 @@ class NewIslamy extends StatelessWidget {
         locale: Locale(languageProvider.selectedLanguage),
         theme: AppTheme.appStyle,
         debugShowCheckedModeBanner: false,
-        home:  const AfterSplashScreen(),
+        home: const AfterSplashScreen(),
       ),
     );
   }

@@ -35,7 +35,7 @@ class TimeProvider extends ChangeNotifier {
     int hour = int.parse(praytimes[0]);
     int minute = int.parse(praytimes[1]);
     DateTime prayerTime = DateTime(DateTime.now().year, DateTime.now().month,
-        DateTime.now().day + 1, hour, minute);
+        DateTime.now().day, hour, minute);
     return prayerTime;
   }
 
@@ -65,9 +65,8 @@ class TimeProvider extends ChangeNotifier {
     if (targetTime.isAfter(now)) {
       duration = targetTime.difference(now);
     } else {
-      duration = Duration.zero;
+      duration = targetTime.difference(now) + const Duration(hours: 24);
     }
-    log(duration.toString());
     timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
