@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/images/
     - assets/text_files/
+    - assets/sounds/
     - assets/azkar.json
   #   - images/a_dot_ham.jpeg
 

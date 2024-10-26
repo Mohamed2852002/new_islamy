@@ -37,49 +37,47 @@ class TimeScreen extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => TimeProvider(),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: SizedBox(height: 16.h),
+    TimeProvider timeProvider = Provider.of<TimeProvider>(context);
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      child: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+          SliverToBoxAdapter(
+            child: TimeWidget(timeProvider: timeProvider),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+          SliverToBoxAdapter(
+            child: Text(
+              AppLocalizations.of(context)!.azkar_list,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelSmall!
+                  .copyWith(fontSize: 16.sp),
             ),
-            const SliverToBoxAdapter(
-              child: TimeWidget(),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+          SliverGrid.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 20.w,
+              mainAxisSpacing: 16.h,
+              mainAxisExtent: 260.h,
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 16.h),
-            ),
-            SliverToBoxAdapter(
-              child: Text(
-                AppLocalizations.of(context)!.azkar_list,
-                style: Theme.of(context)
-                    .textTheme
-                    .labelSmall!
-                    .copyWith(fontSize: 16.sp),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 16.h),
-            ),
-            SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 20.w,
-                mainAxisSpacing: 16.h,
-                mainAxisExtent: 260.h,
-              ),
-              itemCount: models.length,
-              itemBuilder: (context, index) =>
-                  ZekrWidget(azkarModel: models[index]),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(height: 16.h),
-            ),
-          ],
-        ),
+            itemCount: models.length,
+            itemBuilder: (context, index) =>
+                ZekrWidget(azkarModel: models[index]),
+          ),
+          SliverToBoxAdapter(
+            child: SizedBox(height: 16.h),
+          ),
+        ],
       ),
     );
   }

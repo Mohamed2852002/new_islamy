@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/pray_time_model.dart';
 import 'package:new_islamy/painters/left_painter.dart';
 import 'package:new_islamy/painters/right_painter.dart';
+import 'package:new_islamy/providers/time_provider.dart';
 import 'package:new_islamy/providers/language_provider.dart';
 import 'package:new_islamy/services/pray_time_service.dart';
 import 'package:new_islamy/widgets/time_screen_widget/pray_time_widget.dart';
@@ -11,7 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeWidget extends StatefulWidget {
-  const TimeWidget({super.key});
+  const TimeWidget({super.key, required this.timeProvider});
+  final TimeProvider timeProvider;
 
   @override
   State<TimeWidget> createState() => _TimeWidgetState();
@@ -32,10 +34,16 @@ class _TimeWidgetState extends State<TimeWidget>
     });
   }
 
+  prayTimeCounter() async {
+    await widget.timeProvider.initPrayTime();
+    widget.timeProvider.startCountdown();
+  }
+
   @override
   void initState() {
     super.initState();
     fetchPrayTime();
+    prayTimeCounter();
   }
 
   @override
@@ -99,6 +107,25 @@ class _TimeWidgetState extends State<TimeWidget>
                     width: 60.w,
                     height: 50.h,
                   ),
+                ),
+              ),
+              Positioned(
+                bottom: 16.h,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Next Pray - ${widget.timeProvider.formatDuration(widget.timeProvider.duration)}',
+                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                          fontSize: 16.sp,
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
+                    // SizedBox(width: 200.w),
+                    Icon(
+                      Icons.volume_down_rounded,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+                  ],
                 ),
               ),
               isLoading
@@ -193,17 +220,21 @@ class _TimeWidgetState extends State<TimeWidget>
                               ),
                               PrayTimeWidget(
                                   prayName: AppLocalizations.of(context)!.dhuhr,
-                                  prayTime: prayTimeModel.dhuhrTime),
+                                  prayTime: widget.timeProvider
+                                      .setPrayerTime(prayTimeModel.dhuhrTime)),
                               PrayTimeWidget(
                                   prayName: AppLocalizations.of(context)!.asr,
-                                  prayTime: prayTimeModel.asrTime),
+                                  prayTime: widget.timeProvider
+                                      .setPrayerTime(prayTimeModel.asrTime)),
                               PrayTimeWidget(
                                   prayName:
                                       AppLocalizations.of(context)!.maghrib,
-                                  prayTime: prayTimeModel.maghribTime),
+                                  prayTime: widget.timeProvider.setPrayerTime(
+                                      prayTimeModel.maghribTime)),
                               PrayTimeWidget(
                                   prayName: AppLocalizations.of(context)!.isha,
-                                  prayTime: prayTimeModel.ishaTime),
+                                  prayTime: widget.timeProvider
+                                      .setPrayerTime(prayTimeModel.ishaTime)),
                             ],
                             options: CarouselOptions(
                               enlargeFactor: 0.2.h,
