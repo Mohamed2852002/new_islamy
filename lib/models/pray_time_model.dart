@@ -10,7 +10,7 @@ class PrayTimeModel {
   final String gregorianDate;
   final String englishWeekDay;
   final String arabicWeekDay;
-  PrayTimeModel({
+  const PrayTimeModel({
     required this.fajrTime,
     required this.dhuhrTime,
     required this.asrTime,

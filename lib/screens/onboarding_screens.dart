@@ -6,6 +6,7 @@ import 'package:new_islamy/widgets/head_logo_widget.dart';
 import 'package:new_islamy/widgets/onboarding_screen_widget.dart';
 import 'package:new_islamy/widgets/progress_dots.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingScreens extends StatefulWidget {
   const OnboardingScreens({super.key});
@@ -15,6 +16,18 @@ class OnboardingScreens extends StatefulWidget {
 }
 
 class _OnboardingScreensState extends State<OnboardingScreens> {
+  late SharedPreferences sharedPreferences;
+
+  initPref() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  initState() {
+    initPref();
+    super.initState();
+  }
+
   int currentIndex = 0;
   PageController pageController = PageController();
   @override
@@ -91,7 +104,8 @@ class _OnboardingScreensState extends State<OnboardingScreens> {
                 child: GestureDetector(
                   onTap: () {
                     if (currentIndex == 4) {
-                      Navigator.push(
+                      sharedPreferences.setBool('toHome', true);
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const AppHomeNavigation(),
