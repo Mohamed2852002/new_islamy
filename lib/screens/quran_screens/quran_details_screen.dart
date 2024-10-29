@@ -11,7 +11,7 @@ class QuranDetailsScreen extends StatefulWidget {
   State<QuranDetailsScreen> createState() => _QuranDetailsScreenState();
 }
 
-class _QuranDetailsScreenState extends State<QuranDetailsScreen> {
+class _QuranDetailsScreenState extends State<QuranDetailsScreen>{
   bool isLoading = true;
   @override
   void initState() {

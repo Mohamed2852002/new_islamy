@@ -5,6 +5,7 @@ import 'package:new_islamy/screens/quran_screens/quran_details_screen.dart';
 import 'package:new_islamy/widgets/quran_screens_widgets/most_recently_widget.dart';
 import 'package:new_islamy/widgets/quran_screens_widgets/quran_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
@@ -14,7 +15,7 @@ class QuranScreen extends StatefulWidget {
 
 class _QuranScreenState extends State<QuranScreen>
     with AutomaticKeepAliveClientMixin {
-  final List<SuraModel> suras = [
+  final List<SuraModel> suras = const [
     SuraModel(
         arabSuraName: "الفاتحة",
         englishSuraName: "Al-Fatiha",
@@ -613,20 +614,62 @@ class _QuranScreenState extends State<QuranScreen>
 
   @override
   bool get wantKeepAlive => true;
+  bool isVisible = false;
+  List<MostRecentlyWidget> mostRecentSuras = [];
+  List<int> surasIndex = [];
+
+  loadMostRecentSura() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    List<String>? arabSuraNames =
+        sharedPreferences.getStringList('arabSuraName');
+    List<String>? englishSuraNames =
+        sharedPreferences.getStringList('englishSuraName');
+    List<String>? suraVerses = sharedPreferences.getStringList('suraVerses');
+    if (arabSuraNames != null &&
+        englishSuraNames != null &&
+        suraVerses != null) {
+      if (arabSuraNames.isNotEmpty) {
+        isVisible = true;
+        if (sharedPreferences.getStringList('suraIndex') != null) {
+          for (var i = 0;
+              i < sharedPreferences.getStringList('suraIndex')!.length;
+              i++) {
+            surasIndex.add(
+                int.parse(sharedPreferences.getStringList('suraIndex')![i]));
+          }
+        }
+        for (var i = 0; i < arabSuraNames.length; i++) {
+          mostRecentSuras.add(
+            MostRecentlyWidget(
+                arabSuraName: arabSuraNames[i],
+                englishSuraName: englishSuraNames[i],
+                suraVerses: suraVerses[i]),
+          );
+        }
+      } else {
+        mostRecentSuras = [];
+        surasIndex = [];
+      }
+    } else {
+      mostRecentSuras = [];
+      surasIndex = [];
+    }
+    setState(() {});
+  }
 
   @override
   void initState() {
+    loadMostRecentSura();
     super.initState();
     foundSura = suras;
   }
 
-  bool isVisible = false;
-  List<MostRecentlyWidget> mostRecentSuras = [];
-  List<int> surasIndex = [];
-  void addMostRecentSura(SuraModel suraModel, int index) {
+  void addMostRecentSura(SuraModel suraModel, int index) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if (surasIndex.contains(index)) {
       return;
     }
+
     if (mostRecentSuras.length == 3) {
       mostRecentSuras.removeAt(0);
     }
@@ -634,9 +677,25 @@ class _QuranScreenState extends State<QuranScreen>
       surasIndex.removeAt(0);
     }
     mostRecentSuras.add(
-      MostRecentlyWidget(suraModel: suraModel),
+      MostRecentlyWidget(
+        englishSuraName: suraModel.englishSuraName,
+        arabSuraName: suraModel.arabSuraName,
+        suraVerses: suraModel.suraVerses.toString(),
+      ),
     );
     surasIndex.add(index);
+    List<String> indexsurah =
+        surasIndex.map((index) => index.toString()).toList();
+    List<String> arabSuraNames =
+        mostRecentSuras.map((data) => data.arabSuraName).toList();
+    List<String> englishSuraNames =
+        mostRecentSuras.map((data) => data.englishSuraName).toList();
+    List<String> suraVerses =
+        mostRecentSuras.map((data) => data.suraVerses).toList();
+    sharedPreferences.setStringList('suraIndex', indexsurah);
+    sharedPreferences.setStringList('arabSuraName', arabSuraNames);
+    sharedPreferences.setStringList('englishSuraName', englishSuraNames);
+    sharedPreferences.setStringList('suraVerses', suraVerses);
   }
 
   @override
@@ -661,9 +720,7 @@ class _QuranScreenState extends State<QuranScreen>
         Expanded(
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
-                child: SizedBox(height: 20.h),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 20.h)),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 20.h),
                 sliver: SliverToBoxAdapter(
@@ -678,8 +735,16 @@ class _QuranScreenState extends State<QuranScreen>
                             ),
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
+                          SharedPreferences sharedPreferences =
+                              await SharedPreferences.getInstance();
+
                           setState(() {
+                            sharedPreferences.setStringList('suraIndex', []);
+                            sharedPreferences.setStringList('arabSuraName', []);
+                            sharedPreferences
+                                .setStringList('englishSuraName', []);
+                            sharedPreferences.setStringList('suraVerses', []);
                             isVisible = false;
                             mostRecentSuras.clear();
                             surasIndex.clear();
@@ -703,9 +768,7 @@ class _QuranScreenState extends State<QuranScreen>
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 10.h),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 sliver: SliverToBoxAdapter(
@@ -724,9 +787,7 @@ class _QuranScreenState extends State<QuranScreen>
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(height: 10.h),
-              ),
+              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
               SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: 20.h),
                 sliver: SliverToBoxAdapter(

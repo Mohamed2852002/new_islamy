@@ -4,7 +4,7 @@ class SuraModel {
   final int suraVerses;
   final int surahNumber;
 
-  SuraModel({
+  const SuraModel({
     required this.arabSuraName,
     required this.surahNumber,
     required this.englishSuraName,

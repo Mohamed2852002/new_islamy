@@ -3,9 +3,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:new_islamy/models/radio_model.dart';
 import 'package:new_islamy/providers/radio_provider.dart';
 import 'package:new_islamy/services/radio_service.dart';
-import 'package:new_islamy/widgets/radio_screens_widgets/radio_info_widget.dart';
+import 'package:new_islamy/widgets/radio_screens_widgets/radio_list_builder.dart';
+import 'package:new_islamy/widgets/radio_screens_widgets/reciter_name_list_builder.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RadioScreen extends StatefulWidget {
   const RadioScreen({super.key});
@@ -16,26 +18,27 @@ class RadioScreen extends StatefulWidget {
 
 class _RadioScreenState extends State<RadioScreen>
     with AutomaticKeepAliveClientMixin {
+  PageController pageController = PageController();
   bool onRadioScreen = true;
-  bool isLoading = true;
   RadioService radioService = RadioService();
   List<RadioModel> radioModels = [];
-  List<RadioModel> recitersModels = [];
+  bool isLoading = true;
+  late SharedPreferences sharedPreferences;
   fetchRadio() async {
+    sharedPreferences = await SharedPreferences.getInstance();
     radioModels = await radioService.getRadio();
-    recitersModels = await radioService.getReciter();
     isLoading = false;
     setState(() {});
   }
 
   @override
-  bool get wantKeepAlive => true;
+  void initState() {
+    fetchRadio();
+    super.initState();
+  }
 
   @override
-  void initState() {
-    super.initState();
-    fetchRadio();
-  }
+  bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
@@ -45,116 +48,119 @@ class _RadioScreenState extends State<RadioScreen>
       create: (context) => RadioProvider(),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            SizedBox(height: 18.h),
-            Container(
-              height: 40.h,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(12.r),
-              ),
-              child: Directionality(
-                textDirection: TextDirection.ltr,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          onRadioScreen = true;
-                          setState(() {});
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: onRadioScreen
-                                ? Theme.of(context).colorScheme.primary
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.radio_tab,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
-                                  .copyWith(
-                                    color: onRadioScreen
-                                        ? Colors.black
-                                        : Colors.white,
-                                    fontSize: 16.sp,
+        child: isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  SizedBox(height: 18.h),
+                  Container(
+                    height: 40.h,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Directionality(
+                      textDirection: TextDirection.ltr,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                onRadioScreen = true;
+                                pageController.previousPage(
+                                    duration: const Duration(microseconds: 800),
+                                    curve: Curves.linear);
+                                setState(() {});
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: onRadioScreen
+                                      ? Theme.of(context).colorScheme.primary
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.radio_tab,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .copyWith(
+                                          color: onRadioScreen
+                                              ? Colors.black
+                                              : Colors.white,
+                                          fontSize: 16.sp,
+                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
-                              textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          onRadioScreen = false;
-                          setState(() {});
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: onRadioScreen
-                                ? Colors.transparent
-                                : Theme.of(context).colorScheme.primary,
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.of(context)!.reciters_tab,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelSmall!
-                                  .copyWith(
-                                    color: onRadioScreen
-                                        ? Colors.white
-                                        : Colors.black,
-                                    fontSize: 16.sp,
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                onRadioScreen = false;
+                                pageController.nextPage(
+                                    duration: const Duration(microseconds: 800),
+                                    curve: Curves.linear);
+                                setState(() {});
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: onRadioScreen
+                                      ? Colors.transparent
+                                      : Theme.of(context).colorScheme.primary,
+                                  borderRadius: BorderRadius.circular(12.r),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.of(context)!.reciters_tab,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .labelSmall!
+                                        .copyWith(
+                                          color: onRadioScreen
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontSize: 16.sp,
+                                        ),
+                                    textAlign: TextAlign.center,
                                   ),
-                              textAlign: TextAlign.center,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 18.h),
+                  Expanded(
+                    child: PageView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      controller: pageController,
+                      children: [
+                        RadioListBuilder(
+                          radioModels: radioModels,
+                          isLoading: isLoading,
+                          sharedPreferences: sharedPreferences,
+                        ),
+                        ReciterNameListBuilder(
+                          isLoading: isLoading,
+                          sharedPreferences: sharedPreferences,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 18.h),
-            onRadioScreen
-                ? isLoading
-                    ? const Expanded(
-                        child: Center(child: CircularProgressIndicator()))
-                    : Expanded(
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 16.h),
-                          itemCount: radioModels.length,
-                          itemBuilder: (context, index) =>
-                              RadioInfoWidget(radioModel: radioModels[index]),
-                        ),
-                      )
-                : isLoading
-                    ? const Expanded(
-                        child: Center(child: CircularProgressIndicator()))
-                    : Expanded(
-                        child: ListView.separated(
-                          padding: EdgeInsets.zero,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 16.h),
-                          itemCount: recitersModels.length,
-                          itemBuilder: (context, index) => RadioInfoWidget(
-                              radioModel: recitersModels[index]),
-                        ),
-                      ),
-          ],
-        ),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:new_islamy/services/pray_time_service.dart';
 import 'package:new_islamy/widgets/time_screen_widget/pray_time_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TimeWidget extends StatefulWidget {
   const TimeWidget({super.key, required this.timeProvider});
@@ -27,8 +28,13 @@ class _TimeWidgetState extends State<TimeWidget>
   bool isLoading = true;
   late PrayTimeModel prayTimeModel;
   PrayTimeService prayTimeService = PrayTimeService();
+  late SharedPreferences sharedPreferences;
+
   fetchPrayTime() async {
     prayTimeModel = await prayTimeService.getPrayTime();
+    sharedPreferences = await SharedPreferences.getInstance();
+    await widget.timeProvider.initPrayTime();
+    widget.timeProvider.startCountdown();
     setState(() {
       isLoading = false;
     });
@@ -43,7 +49,6 @@ class _TimeWidgetState extends State<TimeWidget>
   void initState() {
     super.initState();
     fetchPrayTime();
-    prayTimeCounter();
   }
 
   @override
@@ -218,6 +223,8 @@ class _TimeWidgetState extends State<TimeWidget>
                                       .setPrayerTime(prayTimeModel.ishaTime)),
                             ],
                             options: CarouselOptions(
+                              initialPage:
+                                  sharedPreferences.getInt('prayerIndex') ?? 0,
                               enlargeFactor: 0.2.h,
                               height: 130.h,
                               viewportFraction: 0.35.w,
@@ -261,9 +268,13 @@ class _TimeWidgetState extends State<TimeWidget>
                             ),
                             SizedBox(width: 30.w),
                             IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.volume_off_rounded,
+                              onPressed: () {
+                                widget.timeProvider.muteAdhan();
+                              },
+                              icon: Icon(
+                                widget.timeProvider.canPlayAdhan
+                                    ? Icons.volume_up_rounded
+                                    : Icons.volume_off_rounded,
                               ),
                               color: Theme.of(context).colorScheme.secondary,
                             ),

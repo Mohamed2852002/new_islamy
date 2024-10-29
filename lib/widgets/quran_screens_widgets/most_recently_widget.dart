@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:new_islamy/models/sura_model.dart';
 
 class MostRecentlyWidget extends StatelessWidget {
-  const MostRecentlyWidget({super.key, required this.suraModel});
-  final SuraModel suraModel;
+  const MostRecentlyWidget({super.key, required this.arabSuraName, required this.englishSuraName, required this.suraVerses});
+  final String arabSuraName;
+  final String englishSuraName;
+  final String suraVerses;
 
   @override
   Widget build(BuildContext context) {
@@ -22,21 +23,21 @@ class MostRecentlyWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Text(
-                suraModel.englishSuraName,
+                englishSuraName,
                 style: Theme.of(context).textTheme.labelSmall!.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 20.sp,
                     ),
               ),
               Text(
-                suraModel.arabSuraName,
+                arabSuraName,
                 style: Theme.of(context).textTheme.labelSmall!.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 20.sp,
                     ),
               ),
               Text(
-                suraModel.suraVerses.toString(),
+                suraVerses,
                 style: Theme.of(context).textTheme.labelSmall!.copyWith(
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 14.sp,
