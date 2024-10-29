@@ -1,41 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:new_islamy/models/radio_model.dart';
 import 'package:new_islamy/providers/radio_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RadioInfoWidget extends StatefulWidget {
-  const RadioInfoWidget({
-    super.key,
-    required this.radioModel,
-    required this.index,
-    required this.sharedPreferences,
-  });
-  final RadioModel radioModel;
-  final int index;
+class ReciterInfoWidget extends StatefulWidget {
+  const ReciterInfoWidget(
+      {super.key,
+      required this.surahUrl,
+      required this.surahName,
+      required this.radioProvider,
+      required this.sharedPreferences,
+      required this.surahIndex,
+      required this.reciterIndex});
+  final String surahUrl;
+  final String surahName;
   final SharedPreferences sharedPreferences;
+  final int surahIndex;
+  final int reciterIndex;
+  final RadioProvider radioProvider;
 
   @override
-  State<RadioInfoWidget> createState() => _RadioInfoWidgetState();
+  State<ReciterInfoWidget> createState() => _ReciterInfoWidgetState();
 }
 
-class _RadioInfoWidgetState extends State<RadioInfoWidget>
+class _ReciterInfoWidgetState extends State<ReciterInfoWidget>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
   bool isPlaying = false;
-  bool canPlay = false;
   bool isFavourite = false;
-  AudioPlayer audioPlayer = AudioPlayer();
   bool isMuted = false;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   late Animation<double> waveAnimation;
   late AnimationController controller;
-
   @override
   void initState() {
-    isFavourite =
-        widget.sharedPreferences.getBool('isFavourite${widget.index}') ?? false;
+    isFavourite = widget.sharedPreferences.getBool(
+            'reciterFavourite${widget.reciterIndex}${widget.surahIndex}') ??
+        false;
     controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -47,7 +49,6 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    RadioProvider radioProvider = Provider.of<RadioProvider>(context);
     return Directionality(
       textDirection: TextDirection.ltr,
       child: Container(
@@ -95,7 +96,7 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  widget.radioModel.radioName,
+                  widget.surahName,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.labelSmall!.copyWith(
                       fontSize: 20.sp,
@@ -107,8 +108,9 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
                     IconButton(
                       onPressed: () {
                         isFavourite = !isFavourite;
-                        widget.sharedPreferences
-                            .setBool('isFavourite${widget.index}', isFavourite);
+                        widget.sharedPreferences.setBool(
+                            'reciterFavourite${widget.reciterIndex}${widget.surahIndex}',
+                            isFavourite);
                         setState(() {});
                       },
                       icon: Icon(isFavourite
@@ -119,19 +121,21 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
                         ? IconButton(
                             onPressed: () {
                               audioPlayer.pause();
-                              radioProvider.nowPlaying = false;
+                              widget.radioProvider.reciterNowPlaying = false;
                               isPlaying = false;
                               setState(() {});
                             },
                             icon: const Icon(Icons.pause))
                         : IconButton(
                             onPressed: () {
-                              if (radioProvider.nowPlaying == false && radioProvider.reciterNowPlaying == false) {
-                                audioPlayer.setUrl(widget.radioModel.radioUrl);
+                              if (widget.radioProvider.reciterNowPlaying ==
+                                      false &&
+                                  widget.radioProvider.nowPlaying == false) {
+                                audioPlayer.setUrl(widget.surahUrl);
                                 audioPlayer.play();
                                 controller.repeat(reverse: true);
-                                radioProvider.nowPlaying = true;
                                 isPlaying = true;
+                                widget.radioProvider.reciterNowPlaying = true;
                                 setState(() {});
                               }
                             },
@@ -158,6 +162,7 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
       ),
     );
   }
+
   @override
   void dispose() {
     controller.dispose();

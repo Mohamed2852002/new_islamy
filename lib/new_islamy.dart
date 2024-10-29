@@ -32,7 +32,7 @@ class NewIslamy extends StatelessWidget {
         locale: Locale(languageProvider.selectedLanguage),
         theme: AppTheme.appStyle,
         debugShowCheckedModeBanner: false,
-        home: const AfterSplashScreen(),
+        home: AfterSplashScreen(languageProvider: languageProvider),
       ),
     );
   }

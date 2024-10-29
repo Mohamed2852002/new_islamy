@@ -1,0 +1,175 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:new_islamy/models/reciter_model.dart';
+import 'package:new_islamy/providers/radio_provider.dart';
+import 'package:new_islamy/widgets/head_logo_widget.dart';
+import 'package:new_islamy/widgets/radio_screens_widgets/reciter_info_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class ReciterSurahList extends StatelessWidget {
+  const ReciterSurahList(
+      {super.key,
+      required this.reciterModel,
+      required this.reciterName,
+      required this.radioProvider,
+      required this.sharedPreferences,
+      required this.reciterIndex});
+  final List<String> surahNames = const [
+    "الفاتحة",
+    "البقرة",
+    "آل عمران",
+    "النساء",
+    "المائدة",
+    "الأنعام",
+    "الأعراف",
+    "الأنفال",
+    "التوبة",
+    "يونس",
+    "هود",
+    "يوسف",
+    "الرعد",
+    "إبراهيم",
+    "الحجر",
+    "النحل",
+    "الإسراء",
+    "الكهف",
+    "مريم",
+    "طه",
+    "الأنبياء",
+    "الحج",
+    "المؤمنون",
+    "النور",
+    "الفرقان",
+    "الشعراء",
+    "النمل",
+    "القصص",
+    "العنكبوت",
+    "الروم",
+    "لقمان",
+    "السجدة",
+    "الأحزاب",
+    "سبأ",
+    "فاطر",
+    "يس",
+    "الصافات",
+    "ص",
+    "الزمر",
+    "غافر",
+    "فصلت",
+    "الشورى",
+    "الزخرف",
+    "الدخان",
+    "الجاثية",
+    "الأحقاف",
+    "محمد",
+    "الفتح",
+    "الحجرات",
+    "ق",
+    "الذاريات",
+    "الطور",
+    "النجم",
+    "القمر",
+    "الرحمن",
+    "الواقعة",
+    "الحديد",
+    "المجادلة",
+    "الحشر",
+    "الممتحنة",
+    "الصف",
+    "الجمعة",
+    "المنافقون",
+    "التغابن",
+    "الطلاق",
+    "التحريم",
+    "الملك",
+    "القلم",
+    "الحاقة",
+    "المعارج",
+    "نوح",
+    "الجن",
+    "المزمل",
+    "المدثر",
+    "القيامة",
+    "الإنسان",
+    "المرسلات",
+    "النبأ",
+    "النازعات",
+    "عبس",
+    "التكوير",
+    "الانفطار",
+    "المطففين",
+    "الانشقاق",
+    "البروج",
+    "الطارق",
+    "الأعلى",
+    "الغاشية",
+    "الفجر",
+    "البلد",
+    "الشمس",
+    "الليل",
+    "الضحى",
+    "الشرح",
+    "التين",
+    "العلق",
+    "القدر",
+    "البينة",
+    "الزلزلة",
+    "العاديات",
+    "القارعة",
+    "التكاثر",
+    "العصر",
+    "الهمزة",
+    "الفيل",
+    "قريش",
+    "الماعون",
+    "الكوثر",
+    "الكافرون",
+    "النصر",
+    "المسد",
+    "الإخلاص",
+    "الفلق",
+    "الناس"
+  ];
+  final List<ReciterModel> reciterModel;
+  final String reciterName;
+  final RadioProvider radioProvider;
+  final SharedPreferences sharedPreferences;
+  final int reciterIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w),
+        child: Column(
+          children: [
+            const HeadLogoWidget(),
+            Text(
+              reciterName,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                    fontSize: 24.sp,
+                  ),
+            ),
+            SizedBox(height: 16.h),
+            Expanded(
+              child: ListView.separated(
+                padding: EdgeInsets.zero,
+                itemCount: surahNames.length,
+                itemBuilder: (context, index) => ReciterInfoWidget(
+                  surahUrl: reciterModel[index].reciterUrl,
+                  surahName: surahNames[index],
+                  radioProvider: radioProvider,
+                  sharedPreferences: sharedPreferences,
+                  surahIndex: index,
+                  reciterIndex: reciterIndex,
+                ),
+                separatorBuilder: (context, index) => SizedBox(height: 16.h),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

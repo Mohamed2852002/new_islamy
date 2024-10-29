@@ -10,6 +10,7 @@ import 'package:new_islamy/widgets/change_language_button.dart';
 import 'package:new_islamy/widgets/head_logo_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AppHomeNavigation extends StatefulWidget {
   const AppHomeNavigation({super.key});
@@ -28,11 +29,22 @@ class _AppHomeNavigationState extends State<AppHomeNavigation> {
     'assets/images/silhouette-woman-reading-quran.png',
     'assets/images/taj-mahal-agra-india 1.png',
   ];
+  late SharedPreferences sharedPreferences;
+  getSharePref() async {
+    sharedPreferences = await SharedPreferences.getInstance();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getSharePref();
+  }
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => TimeProvider(),
+      create: (context) => TimeProvider(
+          playAdhan: sharedPreferences.getBool('playAdhan') ?? true),
       child: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
