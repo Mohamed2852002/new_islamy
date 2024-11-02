@@ -625,9 +625,12 @@ class _QuranScreenState extends State<QuranScreen>
     List<String>? englishSuraNames =
         sharedPreferences.getStringList('englishSuraName');
     List<String>? suraVerses = sharedPreferences.getStringList('suraVerses');
+    List<String>? suraNumbers =
+        sharedPreferences.getStringList('suraNumberssuraVerses');
     if (arabSuraNames != null &&
         englishSuraNames != null &&
-        suraVerses != null) {
+        suraVerses != null &&
+        suraNumbers != null) {
       if (arabSuraNames.isNotEmpty) {
         isVisible = true;
         if (sharedPreferences.getStringList('suraIndex') != null) {
@@ -641,9 +644,13 @@ class _QuranScreenState extends State<QuranScreen>
         for (var i = 0; i < arabSuraNames.length; i++) {
           mostRecentSuras.add(
             MostRecentlyWidget(
+              suraModel: SuraModel(
                 arabSuraName: arabSuraNames[i],
+                surahNumber: int.parse(suraNumbers[i]),
                 englishSuraName: englishSuraNames[i],
-                suraVerses: suraVerses[i]),
+                suraVerses: int.parse(suraVerses[i]),
+              ),
+            ),
           );
         }
       } else {
@@ -678,24 +685,31 @@ class _QuranScreenState extends State<QuranScreen>
     }
     mostRecentSuras.add(
       MostRecentlyWidget(
-        englishSuraName: suraModel.englishSuraName,
-        arabSuraName: suraModel.arabSuraName,
-        suraVerses: suraModel.suraVerses.toString(),
+        suraModel: SuraModel(
+            arabSuraName: suraModel.arabSuraName,
+            surahNumber: suraModel.surahNumber,
+            englishSuraName: suraModel.englishSuraName,
+            suraVerses: suraModel.suraVerses),
       ),
     );
     surasIndex.add(index);
     List<String> indexsurah =
         surasIndex.map((index) => index.toString()).toList();
     List<String> arabSuraNames =
-        mostRecentSuras.map((data) => data.arabSuraName).toList();
+        mostRecentSuras.map((data) => data.suraModel.arabSuraName).toList();
     List<String> englishSuraNames =
-        mostRecentSuras.map((data) => data.englishSuraName).toList();
-    List<String> suraVerses =
-        mostRecentSuras.map((data) => data.suraVerses).toList();
+        mostRecentSuras.map((data) => data.suraModel.englishSuraName).toList();
+    List<String> suraVerses = mostRecentSuras
+        .map((data) => data.suraModel.suraVerses.toString())
+        .toList();
+    List<String> suraNumbers = mostRecentSuras
+        .map((data) => data.suraModel.suraVerses.toString())
+        .toList();
     sharedPreferences.setStringList('suraIndex', indexsurah);
     sharedPreferences.setStringList('arabSuraName', arabSuraNames);
     sharedPreferences.setStringList('englishSuraName', englishSuraNames);
     sharedPreferences.setStringList('suraVerses', suraVerses);
+    sharedPreferences.setStringList('suraNumbers', suraNumbers);
   }
 
   @override
@@ -781,7 +795,21 @@ class _QuranScreenState extends State<QuranScreen>
                             SizedBox(width: 10.w),
                         scrollDirection: Axis.horizontal,
                         itemCount: mostRecentSuras.length,
-                        itemBuilder: (context, index) => mostRecentSuras[index],
+                        itemBuilder: (context, index) => GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => QuranDetailsScreen(
+                                    suraModel: foundSura[mostRecentSuras[index]
+                                            .suraModel
+                                            .surahNumber -
+                                        1],
+                                  ),
+                                ),
+                              );
+                            },
+                            child: mostRecentSuras[index]),
                       ),
                     ),
                   ),

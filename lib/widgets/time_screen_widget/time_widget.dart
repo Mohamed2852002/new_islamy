@@ -40,11 +40,6 @@ class _TimeWidgetState extends State<TimeWidget>
     });
   }
 
-  prayTimeCounter() async {
-    await widget.timeProvider.initPrayTime();
-    widget.timeProvider.startCountdown();
-  }
-
   @override
   void initState() {
     super.initState();
@@ -201,8 +196,8 @@ class _TimeWidgetState extends State<TimeWidget>
                             items: [
                               PrayTimeWidget(
                                 prayName: AppLocalizations.of(context)!.fajr,
-                                prayTime: prayTimeModel.fajrTime,
-                                time: 'AM',
+                                prayTime: widget.timeProvider
+                                    .setPrayerTime(prayTimeModel.fajrTime),
                               ),
                               PrayTimeWidget(
                                   prayName: AppLocalizations.of(context)!.dhuhr,
@@ -268,8 +263,9 @@ class _TimeWidgetState extends State<TimeWidget>
                             ),
                             SizedBox(width: 30.w),
                             IconButton(
-                              onPressed: () {
-                                widget.timeProvider.muteAdhan();
+                              onPressed: () async {
+                                await widget.timeProvider.muteAdhan();
+                                await widget.timeProvider.initPrayTimeMain();
                               },
                               icon: Icon(
                                 widget.timeProvider.canPlayAdhan

@@ -43,10 +43,19 @@ dependencies:
   just_audio: ^0.9.41
   flutter_localization: ^0.2.2
   intl: any
+  flutter_local_notifications: ^17.2.4
+  alarm: ^4.0.8
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.13.1"  
+  
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app_logo.png"
+  min_sdk_android: 21
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -72,6 +81,7 @@ flutter:
     - assets/images/
     - assets/text_files/
     - assets/sounds/
+    - assets/icons/
     - assets/azkar.json
   #   - images/a_dot_ham.jpeg
 

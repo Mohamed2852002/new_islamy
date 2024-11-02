@@ -3,7 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PrayTimeWidget extends StatelessWidget {
   const PrayTimeWidget(
-      {super.key, required this.prayName, required this.prayTime, this.time = 'PM'});
+      {super.key,
+      required this.prayName,
+      required this.prayTime,
+      this.time = 'PM'});
   final String prayName;
   final String prayTime;
   final String time;
@@ -30,23 +33,24 @@ class PrayTimeWidget extends StatelessWidget {
             prayName,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
                   color: Colors.white,
-                  fontSize: 16.sp,
+                  fontSize: 18.sp,
                 ),
           ),
           Text(
             prayTime,
+            textAlign: TextAlign.center,
             style: Theme.of(context).textTheme.labelSmall!.copyWith(
                   color: Colors.white,
-                  fontSize: 32.sp,
+                  fontSize: 26.sp,
                 ),
           ),
-          Text(
-            time,
-            style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                  color: Colors.white,
-                  fontSize: 16.sp,
-                ),
-          ),
+          // Text(
+          //   time,
+          //   style: Theme.of(context).textTheme.labelSmall!.copyWith(
+          //         color: Colors.white,
+          //         fontSize: 16.sp,
+          //       ),
+          // ),
         ],
       ),
     );
