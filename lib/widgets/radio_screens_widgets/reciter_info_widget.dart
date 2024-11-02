@@ -113,9 +113,12 @@ class _ReciterInfoWidgetState extends State<ReciterInfoWidget>
                             isFavourite);
                         setState(() {});
                       },
-                      icon: Icon(isFavourite
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_outline_rounded),
+                      icon: Icon(
+                        isFavourite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_outline_rounded,
+                        size: 35.r,
+                      ),
                     ),
                     isPlaying
                         ? IconButton(
@@ -125,7 +128,11 @@ class _ReciterInfoWidgetState extends State<ReciterInfoWidget>
                               isPlaying = false;
                               setState(() {});
                             },
-                            icon: const Icon(Icons.pause))
+                            icon: Icon(
+                              Icons.pause,
+                              size: 35.r,
+                            ),
+                          )
                         : IconButton(
                             onPressed: () {
                               if (widget.radioProvider.reciterNowPlaying ==
@@ -139,7 +146,10 @@ class _ReciterInfoWidgetState extends State<ReciterInfoWidget>
                                 setState(() {});
                               }
                             },
-                            icon: const Icon(Icons.play_arrow_rounded),
+                            icon: Icon(
+                              Icons.play_arrow_rounded,
+                              size: 35.r,
+                            ),
                           ),
                     IconButton(
                       onPressed: () {
@@ -149,9 +159,12 @@ class _ReciterInfoWidgetState extends State<ReciterInfoWidget>
                         isMuted = !isMuted;
                         setState(() {});
                       },
-                      icon: Icon(isMuted
-                          ? Icons.volume_off_rounded
-                          : Icons.volume_up_rounded),
+                      icon: Icon(
+                        isMuted
+                            ? Icons.volume_off_rounded
+                            : Icons.volume_up_rounded,
+                        size: 35.r,
+                      ),
                     ),
                   ],
                 ),
@@ -167,6 +180,8 @@ class _ReciterInfoWidgetState extends State<ReciterInfoWidget>
   void dispose() {
     controller.dispose();
     audioPlayer.dispose();
+    widget.radioProvider.reciterNowPlaying = false;
+    widget.radioProvider.nowPlaying = false;
     super.dispose();
   }
 

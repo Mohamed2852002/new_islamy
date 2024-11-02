@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:intl/intl.dart';
 import 'package:new_islamy/models/pray_time_model.dart';
+import 'package:new_islamy/services/notification_service.dart';
 import 'package:new_islamy/services/pray_time_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -21,30 +23,29 @@ class TimeProvider extends ChangeNotifier {
   }
 
   String setPrayerTime(String prayTime) {
-    List<String> praytime = prayTime.split(':');
-    int hour = int.parse(praytime[0]);
-    if (hour <= 12) {
-    } else {
-      hour -= 12;
-    }
-    return '$hour:${praytime[1]}';
+    DateFormat inputFormat = DateFormat("HH:mm");
+    DateTime dateTime = inputFormat.parse(prayTime);
+    DateFormat outputFormat = DateFormat("hh:mm a");
+    return outputFormat.format(dateTime);
   }
 
   DateTime switchToDateTime(String prayTime) {
     List<String> praytimes = prayTime.split(':');
     int hour = int.parse(praytimes[0]);
     int minute = int.parse(praytimes[1]);
-    DateTime prayerTime = DateTime(DateTime.now().year, DateTime.now().month,
+    late DateTime prayerTime;
+    prayerTime = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day, hour, minute);
+
     return prayerTime;
   }
 
   late PrayTimeModel prayTimeModel;
   PrayTimeService prayTimeService = PrayTimeService();
   List<DateTime> prayerTimes = [];
+  NotificationService notificationService = NotificationService();
 
   initPrayTime() async {
-    await audioPlayer.setAsset('assets/sounds/adhan.mp3');
     prayTimeModel = await prayTimeService.getPrayTime();
     prayerTimes = [
       switchToDateTime(prayTimeModel.fajrTime),
@@ -55,10 +56,68 @@ class TimeProvider extends ChangeNotifier {
     ];
   }
 
+  List<String> prayerNames = [
+    'الفجر',
+    'الظهر',
+    'العصر',
+    'المغرب',
+    'العشاء',
+  ];
+  initPrayTimeMain() async {
+    DateTime now = DateTime.now();
+    prayTimeModel = await prayTimeService.getPrayTime();
+    prayerTimes = [
+      switchToDateTime(prayTimeModel.fajrTime),
+      switchToDateTime(prayTimeModel.dhuhrTime),
+      switchToDateTime(prayTimeModel.asrTime),
+      switchToDateTime(prayTimeModel.maghribTime),
+      switchToDateTime(prayTimeModel.ishaTime),
+    ];
+    if (canPlayAdhan) {
+      await Alarm.set(
+          alarmSettings: NotificationService.returnAlarmSettings(
+              51,
+              now.isAfter(prayerTimes[0])
+                  ? prayerTimes[0].add(Duration(days: 1))
+                  : prayerTimes[0],
+              prayerNames[0]));
+      await Alarm.set(
+          alarmSettings: NotificationService.returnAlarmSettings(
+              52,
+              now.isAfter(prayerTimes[1])
+                  ? prayerTimes[1].add(Duration(days: 1))
+                  : prayerTimes[1],
+              prayerNames[1]));
+      await Alarm.set(
+          alarmSettings: NotificationService.returnAlarmSettings(
+              53,
+              now.isAfter(prayerTimes[2])
+                  ? prayerTimes[2].add(Duration(days: 1))
+                  : prayerTimes[2],
+              prayerNames[2]));
+      await Alarm.set(
+          alarmSettings: NotificationService.returnAlarmSettings(
+              54,
+              now.isAfter(prayerTimes[3])
+                  ? prayerTimes[3].add(Duration(days: 1))
+                  : prayerTimes[3],
+              prayerNames[3]));
+
+      await Alarm.set(
+          alarmSettings: NotificationService.returnAlarmSettings(
+              55,
+              now.isAfter(prayerTimes[4])
+                  ? prayerTimes[4].add(Duration(days: 1))
+                  : prayerTimes[4],
+              prayerNames[4]));
+    } else {
+      Alarm.stopAll();
+    }
+  }
+
   Timer? timer;
   Duration duration = const Duration();
   int index = 0;
-  AudioPlayer audioPlayer = AudioPlayer();
   bool canPlayAdhan = true;
   void startCountdown() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -96,14 +155,6 @@ class TimeProvider extends ChangeNotifier {
       const Duration(seconds: 1),
       (timer) {
         if (duration.inSeconds <= 0) {
-          if (canPlayAdhan) {
-            audioPlayer.play();
-          }
-          if (index == 4) {
-            index = 0;
-          } else {
-            index++;
-          }
           startCountdown();
           notifyListeners();
         } else {

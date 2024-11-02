@@ -111,9 +111,12 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
                             .setBool('isFavourite${widget.index}', isFavourite);
                         setState(() {});
                       },
-                      icon: Icon(isFavourite
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_outline_rounded),
+                      icon: Icon(
+                        isFavourite
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_outline_rounded,
+                        size: 35.r,
+                      ),
                     ),
                     isPlaying
                         ? IconButton(
@@ -123,10 +126,14 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
                               isPlaying = false;
                               setState(() {});
                             },
-                            icon: const Icon(Icons.pause))
+                            icon: Icon(
+                              Icons.pause,
+                              size: 35.r,
+                            ))
                         : IconButton(
                             onPressed: () {
-                              if (radioProvider.nowPlaying == false && radioProvider.reciterNowPlaying == false) {
+                              if (radioProvider.nowPlaying == false &&
+                                  radioProvider.reciterNowPlaying == false) {
                                 audioPlayer.setUrl(widget.radioModel.radioUrl);
                                 audioPlayer.play();
                                 controller.repeat(reverse: true);
@@ -135,7 +142,10 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
                                 setState(() {});
                               }
                             },
-                            icon: const Icon(Icons.play_arrow_rounded),
+                            icon: Icon(
+                              Icons.play_arrow_rounded,
+                              size: 35.r,
+                            ),
                           ),
                     IconButton(
                       onPressed: () {
@@ -145,9 +155,12 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
                         isMuted = !isMuted;
                         setState(() {});
                       },
-                      icon: Icon(isMuted
-                          ? Icons.volume_off_rounded
-                          : Icons.volume_up_rounded),
+                      icon: Icon(
+                        isMuted
+                            ? Icons.volume_off_rounded
+                            : Icons.volume_up_rounded,
+                        size: 35.r,
+                      ),
                     ),
                   ],
                 ),
@@ -158,6 +171,7 @@ class _RadioInfoWidgetState extends State<RadioInfoWidget>
       ),
     );
   }
+
   @override
   void dispose() {
     controller.dispose();

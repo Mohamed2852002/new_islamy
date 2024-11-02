@@ -11,7 +11,7 @@ class AfterSplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(
-      const Duration(seconds: 2),
+      const Duration(seconds: 1),
       () async {
         Navigator.pushReplacement(
           // ignore: use_build_context_synchronously
